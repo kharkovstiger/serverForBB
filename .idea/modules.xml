@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/serverForBB.iml" filepath="$PROJECT_DIR$/.idea/modules/serverForBB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/serverForBB_main.iml" filepath="$PROJECT_DIR$/.idea/modules/serverForBB_main.iml" group="serverForBB" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/serverForBB_test.iml" filepath="$PROJECT_DIR$/.idea/modules/serverForBB_test.iml" group="serverForBB" />
+    </modules>
+  </component>
+</project>

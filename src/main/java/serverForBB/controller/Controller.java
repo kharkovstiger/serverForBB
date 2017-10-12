@@ -47,7 +47,16 @@ public class Controller {
 
     @GetMapping(value = "/country")
     public ResponseEntity<String> country(@PathParam("login") String login, @PathParam("code") String code){
-        HttpHeaders newHeaders=login(login,code).getHeaders();
+        ResponseEntity<String> q=
+                restTemplate.getForEntity(BASE_URL + "/login.aspx?login="+login+"&code="+code, String.class);
+        HttpHeaders headers=q.getHeaders();
+        ArrayList<String> cookies=new ArrayList<>();
+        cookies.add(headers.get("Set-Cookie").get(0).split(";")[0]);
+        cookies.add(headers.get("Set-Cookie").get(1).split(";")[0]);
+
+        HttpHeaders newHeaders=new HttpHeaders();
+        newHeaders.put("Set-Cookie",cookies);
+//        HttpHeaders newHeaders=login(login,code).getHeaders();
         System.out.println(newHeaders);
         HttpEntity<String> entity = new HttpEntity<>(newHeaders);
 //        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());

@@ -25,6 +25,7 @@ public class Controller {
         ResponseEntity<String> responseJson=
                 restTemplate.getForEntity(BASE_URL + "/login.aspx?login="+login+"&code="+code, String.class);
         HttpHeaders headers=responseJson.getHeaders();
+        System.out.println(headers);
         ArrayList<String> cookies=new ArrayList<>();
         cookies.add(headers.get("Set-Cookie").get(0).split(";")[0]);
         cookies.add(headers.get("Set-Cookie").get(1).split(";")[0]);
@@ -32,12 +33,22 @@ public class Controller {
         HttpHeaders newHeaders=new HttpHeaders();
         newHeaders.put("Set-Cookie",cookies);
         System.out.println(newHeaders);
-        return new ResponseEntity<>(responseJson.getBody(), newHeaders, HttpStatus.OK);
+        return new ResponseEntity<String>(responseJson.getBody(), newHeaders, HttpStatus.OK);
     }
 
     @GetMapping(value = "/player")
     public ResponseEntity<String> player(@PathParam("id") String id, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+
+        ResponseEntity<String> q=
+                restTemplate.getForEntity(BASE_URL + "/login.aspx?login="+login+"&code="+code, String.class);
+        HttpHeaders headers=q.getHeaders();
+        ArrayList<String> cookies=new ArrayList<>();
+        cookies.add(headers.get("Set-Cookie").get(0).split(";")[0]);
+        cookies.add(headers.get("Set-Cookie").get(1).split(";")[0]);
+
+        HttpHeaders headersToSend=new HttpHeaders();
+        headersToSend.put("Cookie",cookies);
+        HttpEntity<String> entity = new HttpEntity<>(headersToSend);
 
         ResponseEntity<String> responseJson =
                     restTemplate.exchange(BASE_URL + "/player.aspx?playerid=" + id, HttpMethod.GET, entity, String.class);
@@ -46,7 +57,8 @@ public class Controller {
     }
 
     @GetMapping(value = "/country")
-    public ResponseEntity<String> country(@PathParam("login") String login, @PathParam("code") String code){
+    public ResponseEntity<String> country(@PathParam("id") String id, @PathParam("login") String login, @PathParam("code") String code){
+
         ResponseEntity<String> q=
                 restTemplate.getForEntity(BASE_URL + "/login.aspx?login="+login+"&code="+code, String.class);
         HttpHeaders headers=q.getHeaders();
@@ -54,12 +66,9 @@ public class Controller {
         cookies.add(headers.get("Set-Cookie").get(0).split(";")[0]);
         cookies.add(headers.get("Set-Cookie").get(1).split(";")[0]);
 
-        HttpHeaders newHeaders=new HttpHeaders();
-        newHeaders.put("Set-Cookie",cookies);
-//        HttpHeaders newHeaders=login(login,code).getHeaders();
-        System.out.println(newHeaders);
-        HttpEntity<String> entity = new HttpEntity<>(newHeaders);
-//        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpHeaders headersToSend=new HttpHeaders();
+        headersToSend.put("Cookie",cookies);
+        HttpEntity<String> entity = new HttpEntity<>(headersToSend);
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/countries.aspx", HttpMethod.GET, entity, String.class);
@@ -69,7 +78,11 @@ public class Controller {
 
     @GetMapping(value = "/league")
     public ResponseEntity<String> league(@PathParam("level") Integer level, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpHeaders newHeaders=login(login,code).getHeaders();
+        System.out.println(newHeaders);
+
+//        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(newHeaders);
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/league.aspx?countryid=33&level="+level, HttpMethod.GET, entity, String.class);

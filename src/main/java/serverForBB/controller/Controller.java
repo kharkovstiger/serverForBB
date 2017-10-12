@@ -31,6 +31,7 @@ public class Controller {
 
         HttpHeaders newHeaders=new HttpHeaders();
         newHeaders.put("Set-Cookie",cookies);
+        System.out.println(newHeaders);
         return new ResponseEntity<>(responseJson.getBody(), newHeaders, HttpStatus.OK);
     }
 
@@ -46,7 +47,10 @@ public class Controller {
 
     @GetMapping(value = "/country")
     public ResponseEntity<String> country(@PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpHeaders newHeaders=login(login,code).getHeaders();
+        System.out.println(newHeaders);
+        HttpEntity<String> entity = new HttpEntity<>(newHeaders);
+//        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/countries.aspx", HttpMethod.GET, entity, String.class);

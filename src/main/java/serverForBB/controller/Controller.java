@@ -59,7 +59,7 @@ public class Controller {
         HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
 
         ResponseEntity<String> responseJson =
-                restTemplate.exchange(BASE_URL + "/league.aspx?countryid=33&level="+level, HttpMethod.GET, entity, String.class);
+                restTemplate.exchange(BASE_URL + "/leagues.aspx?countryid=33&level="+level, HttpMethod.GET, entity, String.class);
 
         return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
     }

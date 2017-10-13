@@ -11,14 +11,13 @@ import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping(value = Controller.REST_URL, produces = MediaType.APPLICATION_XML_VALUE)
+@RequestMapping(value = BBAPIController.REST_URL, produces = MediaType.APPLICATION_XML_VALUE)
 @CrossOrigin
-public class Controller {
+public class BBAPIController {
 
-    static final String REST_URL = "/api";
+    static final String REST_URL = "/api/bbapi";
     private static final String BASE_URL = "http://bbapi.buzzerbeater.com";
     private RestTemplate restTemplate=new RestTemplate();
-
 
     @GetMapping(value = "/login")
     public ResponseEntity<String> login(@PathParam("login") String login, @PathParam("code") String code){

@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.websocket.server.PathParam;
 
 @RestController
-@RequestMapping(value = BBController.REST_URL, produces = MediaType.APPLICATION_XML_VALUE)
+@RequestMapping(value = BBController.REST_URL, produces = MediaType.TEXT_HTML_VALUE)
 @CrossOrigin
 public class BBController {
 

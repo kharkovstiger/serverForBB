@@ -82,4 +82,14 @@ public class BBAPIController {
 
         return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
     }
+
+    @GetMapping(value = "/season")
+    public ResponseEntity<String> team(@PathParam("login") String login, @PathParam("code") String code){
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+
+        ResponseEntity<String> responseJson =
+                restTemplate.exchange(BASE_URL + "/seasons.aspx", HttpMethod.GET, entity, String.class);
+
+        return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
+    }
 }

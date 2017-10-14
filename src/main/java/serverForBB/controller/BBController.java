@@ -31,7 +31,7 @@ public class BBController {
     public ResponseEntity<String> cup(@PathParam("season") String season){
 
         ResponseEntity<String> responseJson=
-                restTemplate.getForEntity(BASE_URL + "country/33/cup.aspx?season="+season, String.class);
+                restTemplate.getForEntity(BASE_URL + "/country/33/cup.aspx?season="+season, String.class);
 
         return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
     }

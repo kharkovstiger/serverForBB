@@ -84,11 +84,21 @@ public class BBAPIController {
     }
 
     @GetMapping(value = "/season")
-    public ResponseEntity<String> team(@PathParam("login") String login, @PathParam("code") String code){
+    public ResponseEntity<String> season(@PathParam("login") String login, @PathParam("code") String code){
         HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/seasons.aspx", HttpMethod.GET, entity, String.class);
+
+        return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/boxscore")
+    public ResponseEntity<String> boxscore(@PathParam("id") String id, @PathParam("login") String login, @PathParam("code") String code){
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+
+        ResponseEntity<String> responseJson =
+                restTemplate.exchange(BASE_URL + "/boxscore.aspx?matchid="+id, HttpMethod.GET, entity, String.class);
 
         return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
     }

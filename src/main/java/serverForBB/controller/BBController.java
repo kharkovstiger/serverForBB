@@ -35,4 +35,19 @@ public class BBController {
 
         return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/ntschedule")
+    public ResponseEntity<String> ntshcedule(@PathParam("season") String season){
+
+        ResponseEntity<String> responseJson;
+        if (season!=null){
+            responseJson =
+                    restTemplate.getForEntity(BASE_URL + "/country/33/nt/schedule.aspx?season="+season, String.class);
+        }
+        else {
+            responseJson =
+                    restTemplate.getForEntity(BASE_URL + "/country/33/nt/schedule.aspx", String.class);
+        }
+        return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
+    }
 }

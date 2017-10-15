@@ -53,4 +53,13 @@ public class BBController {
         }
         return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/game")
+    public ResponseEntity<String> game(@PathParam("id") Integer id){
+
+        ResponseEntity<String> responseJson=
+                restTemplate.getForEntity(BASE_URL + "/match/"+id+"/boxscore.aspx", String.class);
+
+        return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
+    }
 }

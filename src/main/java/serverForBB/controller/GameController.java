@@ -38,7 +38,8 @@ public class GameController {
     public ResponseEntity addGame(@PathParam("id") Integer id){
         String response=bbService.getBoxScore(id);
         Game game=gameService.parseBoxScore(response);
-//        gameService.save(game);
+        game.setId(String.valueOf(id));
+        gameService.save(game);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

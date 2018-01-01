@@ -34,12 +34,7 @@ public class BBAPIController {
 
     @GetMapping(value = "/player")
     public ResponseEntity<String> player(@PathParam("id") String id, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
-
-        ResponseEntity<String> responseJson =
-                    restTemplate.exchange(BASE_URL + "/player.aspx?playerid=" + id, HttpMethod.GET, entity, String.class);
-
-        return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
+        return new ResponseEntity<>(bbapiService.getPlayer(id, login, code),HttpStatus.OK);
     }
 
     @GetMapping(value = "/country")
@@ -92,17 +87,11 @@ public class BBAPIController {
 
     @GetMapping(value = "/season")
     public ResponseEntity<String> season(@PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
-
-        ResponseEntity<String> responseJson =
-                restTemplate.exchange(BASE_URL + "/seasons.aspx", HttpMethod.GET, entity, String.class);
-
-        return new ResponseEntity<>(responseJson.getBody(),HttpStatus.OK);
+        return new ResponseEntity<>(bbapiService.getSeasons(login, code),HttpStatus.OK);
     }
 
     @GetMapping(value = "/boxscore")
     public ResponseEntity<String> boxscore(@PathParam("id") String id, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity=new HttpEntity<>(bbapiService.login(login,code).getHeaders());
-        return new ResponseEntity<>(bbapiService.getBoxScore(id, login, code, entity),HttpStatus.OK);
+        return new ResponseEntity<>(bbapiService.getBoxScore(id, login, code),HttpStatus.OK);
     }
 }

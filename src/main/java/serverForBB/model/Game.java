@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Data
 @Document
@@ -15,7 +16,7 @@ public class Game implements Serializable{
     private String Id;
     private Team homeTeam;
     private Team awayTeam;
-    private int[] score=new int[2];
+    private ArrayList<Integer> score;
     private int season;
     private String type;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")

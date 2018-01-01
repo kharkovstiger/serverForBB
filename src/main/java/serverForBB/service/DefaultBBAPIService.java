@@ -12,7 +12,8 @@ public class DefaultBBAPIService implements BBAPIService {
     private RestTemplate restTemplate=new RestTemplate();
 
     @Override
-    public String getBoxScore(String id, String login, String code, HttpEntity<String> entity) {
+    public String getBoxScore(String id, String login, String code) {
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BBAPIController.BASE_URL + "/boxscore.aspx?matchid="+id, HttpMethod.GET, entity, String.class);
         return responseJson.getBody();
@@ -30,5 +31,21 @@ public class DefaultBBAPIService implements BBAPIService {
         HttpHeaders newHeaders=new HttpHeaders();
         newHeaders.put("Cookie",cookies);
         return new ResponseEntity<>(responseJson.getBody(), newHeaders, HttpStatus.OK);
+    }
+
+    @Override
+    public String getPlayer(String id, String login, String code) {
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        ResponseEntity<String> responseJson =
+                restTemplate.exchange(BBAPIController.BASE_URL + "/player.aspx?playerid=" + id, HttpMethod.GET, entity, String.class);
+        return responseJson.getBody();
+    }
+
+    @Override
+    public String getSeasons(String login, String code) {
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        ResponseEntity<String> responseJson =
+                restTemplate.exchange(BBAPIController.BASE_URL + "/seasons.aspx", HttpMethod.GET, entity, String.class);
+        return responseJson.getBody();
     }
 }

@@ -1,7 +1,6 @@
 package serverForBB.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import serverForBB.model.Game;
 import serverForBB.service.BBAPIService;
+import serverForBB.service.BBService;
 import serverForBB.service.GameService;
 
 import javax.websocket.server.PathParam;
@@ -25,19 +25,20 @@ public class GameController {
     
     private final GameService gameService;
     private final BBAPIService bbapiService;
+    private final BBService bbService;
 
     @Autowired
-    public GameController(GameService gameService, BBAPIService bbapiService) {
+    public GameController(GameService gameService, BBAPIService bbapiService, BBService bbService) {
         this.gameService = gameService;
         this.bbapiService = bbapiService;
+        this.bbService = bbService;
     }
     
     @GetMapping(value = "addGame")
-    public ResponseEntity addGame(@PathParam("id") String id){
-        HttpEntity<String> entity=new HttpEntity<>(bbapiService.login(LOGIN, CODE).getHeaders());
-        String response=bbapiService.getBoxScore(id, LOGIN, CODE, entity);
+    public ResponseEntity addGame(@PathParam("id") Integer id){
+        String response=bbService.getBoxScore(id);
         Game game=gameService.parseBoxScore(response);
-        gameService.save(game);
+//        gameService.save(game);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

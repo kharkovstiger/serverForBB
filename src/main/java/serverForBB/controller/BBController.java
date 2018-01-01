@@ -1,11 +1,13 @@
 package serverForBB.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import serverForBB.service.BBService;
 
 import javax.websocket.server.PathParam;
 
@@ -15,8 +17,14 @@ import javax.websocket.server.PathParam;
 public class BBController {
 
     static final String REST_URL = "/api/bb";
-    private static final String BASE_URL = "http://buzzerbeater.com";
+    public static final String BASE_URL = "http://buzzerbeater.com";
     private RestTemplate restTemplate=new RestTemplate();
+    private final BBService bbService;
+
+    @Autowired
+    public BBController(BBService bbService) {
+        this.bbService = bbService;
+    }
 
     @GetMapping(value = "/country")
     public ResponseEntity<String> country(){
@@ -56,10 +64,6 @@ public class BBController {
 
     @GetMapping(value = "/game")
     public ResponseEntity<String> game(@PathParam("id") Integer id){
-
-        ResponseEntity<String> responseJson=
-                restTemplate.getForEntity(BASE_URL + "/match/"+id+"/boxscore.aspx", String.class);
-
-        return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
+        return new ResponseEntity<>(bbService.getBoxScore(id), HttpStatus.OK);
     }
 }

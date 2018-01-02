@@ -30,4 +30,15 @@ public class DefaultPlayerRepository implements PlayerRepository {
     public List<Player> getAllFromCountry(String country) {
         return playerCrudRepository.getAllFromCountry(country);
     }
+
+    @Override
+    public List<Player> getAllFromCountryMinGames(String country) {
+        return playerCrudRepository.getAllFromCountryMinGames(country);
+    }
+
+    @Override
+    public List<Player> getAllMinGames(boolean u21) {
+        String regex=u21?".*U21":"(?!.*U21.*).*";
+        return playerCrudRepository.getAllMinGames(regex);
+    }
 }

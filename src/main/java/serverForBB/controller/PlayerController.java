@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Player;
 import serverForBB.service.PlayerService;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,28 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @PostMapping(value = "/getAllFromCountry", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/getAllFromCountry")
     public List<Player> getAllFromCountry(@RequestBody String country){
         return playerService.getAllFromCountry(country); 
+    }
+
+    @PostMapping(value = "/getAllFromCountryForGame")
+    public List<Player> getAllFromCountryForGame(@RequestBody String country){
+        return playerService.getAllFromCountryForGame(country);
+    }
+
+    @GetMapping(value = "/getAllForGame")
+    public List<Player> getAllForGame(@PathParam("u21") boolean u21){
+        return playerService.getAllForGame(u21);
+    }
+
+    @PostMapping(value = "/getAllFromCountryForMinutes")
+    public List<Player> getAllFromCountryForMinutes(@RequestBody String country){
+        return playerService.getAllFromCountryForMinutes(country);
+    }
+
+    @GetMapping(value = "/getAllForMinutes")
+    public List<Player> getAllForMinutes(@PathParam("u21") boolean u21){
+        return playerService.getAllForMinutes(u21);
     }
 }

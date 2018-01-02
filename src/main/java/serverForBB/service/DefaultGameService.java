@@ -22,6 +22,8 @@ import java.io.StringReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class DefaultGameService implements GameService {
@@ -73,9 +75,9 @@ public class DefaultGameService implements GameService {
         setTeamStats(homeTeam, home);
         setPlayersStats(homeTeam, home);
         game.setHomeTeam(homeTeam);
-        ArrayList<Integer> score=new ArrayList<>();
-        score.add(awayTeam.getStats().getPoints());
-        score.add(homeTeam.getStats().getPoints());
+        ArrayList<Double> score=new ArrayList<>();
+        score.add(awayTeam.getStats().get("points"));
+        score.add(homeTeam.getStats().get("points"));
         game.setScore(score);
         return game;
     }
@@ -101,33 +103,32 @@ public class DefaultGameService implements GameService {
         NodeList nodeList=doc.getElementsByTagName("tr");
         team.setPlayers(new ArrayList<>());
         for (int i = 1; i <nodeList.getLength()-1 ; i++) {
-            Player player=new Player();
             String id=((DeferredElementImpl) nodeList.item(i)).getElementsByTagName("a").item(0)
                     .getAttributes().getNamedItem("href").getTextContent().split("/")[2];
             boolean u21=team.getName().split(" ")[team.getName().split(" ").length-1].equals("U21");
-            player.setId(id+(u21?"u21":""));                
-            player.setCountry(team.getName());
+            Player player=new Player(id+(u21?"u21":""), team.getName());
             NodeList nList=((DeferredElementImpl) nodeList.item(i)).getElementsByTagName("td");
             if (nList.getLength()>3){
                 int q=nList.getLength()>15?1:0;
-                Stats stats=new Stats();
-                stats.setGames(1);
-                stats.setMinutes(Integer.parseInt(nList.item(2).getTextContent().trim()));
-                stats.setFieldGoals(Integer.parseInt(nList.item(3).getTextContent().trim().split("-")[0].trim()));
-                stats.setFieldGoalsAttempts(Integer.parseInt(nList.item(3).getTextContent().trim().split("-")[1].trim()));
-                stats.setThreePoints(Integer.parseInt(nList.item(4).getTextContent().trim().split("-")[0].trim()));
-                stats.setThreePointsAttempts(Integer.parseInt(nList.item(4).getTextContent().trim().split("-")[1].trim()));
-                stats.setFreeThrows(Integer.parseInt(nList.item(5).getTextContent().trim().split("-")[0].trim()));
-                stats.setFreeThrowsAttempts(Integer.parseInt(nList.item(5).getTextContent().trim().split("-")[1].trim()));
-                stats.setPlusMinus(q==1?Integer.parseInt(nList.item(6).getTextContent().trim()):0);
-                stats.setOffensiveRebounds(Integer.parseInt(nList.item(6+q).getTextContent().trim()));
-                stats.setRebounds(Integer.parseInt(nList.item(7+q).getTextContent().trim()));
-                stats.setAssists(Integer.parseInt(nList.item(8+q).getTextContent().trim()));
-                stats.setTurnovers(Integer.parseInt(nList.item(9+q).getTextContent().trim()));
-                stats.setSteals(Integer.parseInt(nList.item(10+q).getTextContent().trim()));
-                stats.setBlocks(Integer.parseInt(nList.item(11+q).getTextContent().trim()));
-                stats.setFouls(Integer.parseInt(nList.item(12+q).getTextContent().trim()));
-                stats.setPoints(Integer.parseInt(nList.item(13+q).getTextContent().trim()));
+                Map<String, Double> stats=new HashMap<>();
+                Stats.initialize(stats, Player.class.getName());
+                stats.replace("games",1.);
+                stats.replace("minutes",Double.parseDouble(nList.item(2).getTextContent().trim()));
+                stats.replace("fieldGoals",Double.parseDouble(nList.item(3).getTextContent().trim().split("-")[0].trim()));
+                stats.replace("fieldGoalsAttempts",Double.parseDouble(nList.item(3).getTextContent().trim().split("-")[1].trim()));
+                stats.replace("threePoints",Double.parseDouble(nList.item(4).getTextContent().trim().split("-")[0].trim()));
+                stats.replace("threePointsAttempts",Double.parseDouble(nList.item(4).getTextContent().trim().split("-")[1].trim()));
+                stats.replace("freeThrows",Double.parseDouble(nList.item(5).getTextContent().trim().split("-")[0].trim()));
+                stats.replace("freeThrowsAttempts",Double.parseDouble(nList.item(5).getTextContent().trim().split("-")[1].trim()));
+                stats.replace("plusMinus",q==1?Double.parseDouble(nList.item(6).getTextContent().trim()):0);
+                stats.replace("offensiveRebounds",Double.parseDouble(nList.item(6+q).getTextContent().trim()));
+                stats.replace("rebounds",Double.parseDouble(nList.item(7+q).getTextContent().trim()));
+                stats.replace("assists",Double.parseDouble(nList.item(8+q).getTextContent().trim()));
+                stats.replace("turnovers",Double.parseDouble(nList.item(9+q).getTextContent().trim()));
+                stats.replace("steals",Double.parseDouble(nList.item(10+q).getTextContent().trim()));
+                stats.replace("blocks",Double.parseDouble(nList.item(11+q).getTextContent().trim()));
+                stats.replace("fouls",Double.parseDouble(nList.item(12+q).getTextContent().trim()));
+                stats.replace("points",Double.parseDouble(nList.item(13+q).getTextContent().trim()));
                 player.setStats(stats);
                 String playerString=bbapiService.getPlayer(id, LOGIN, CODE);
                 doc=getDocument(playerString);
@@ -161,22 +162,23 @@ public class DefaultGameService implements GameService {
         NodeList nList=((DeferredElementImpl) tr).getElementsByTagName("td");
         String name=nodeList.item(0).getTextContent().trim();
         team.setName(name);
+        Map<String, Double> stats=new HashMap<>();
+        Stats.initialize(stats,Team.class.getName());
         int q=nList.getLength()>15?1:0;
-        Stats stats=new Stats();
-        stats.setFieldGoals(Integer.parseInt(nList.item(2).getTextContent().trim().split("-")[0].trim()));
-        stats.setFieldGoalsAttempts(Integer.parseInt(nList.item(2).getTextContent().trim().split("-")[1].trim()));
-        stats.setThreePoints(Integer.parseInt(nList.item(3).getTextContent().trim().split("-")[0].trim()));
-        stats.setThreePointsAttempts(Integer.parseInt(nList.item(3).getTextContent().trim().split("-")[1].trim()));
-        stats.setFreeThrows(Integer.parseInt(nList.item(4).getTextContent().trim().split("-")[0].trim()));
-        stats.setFreeThrowsAttempts(Integer.parseInt(nList.item(4).getTextContent().trim().split("-")[1].trim()));
-        stats.setOffensiveRebounds(Integer.parseInt(nList.item(5+q).getTextContent().trim()));
-        stats.setRebounds(Integer.parseInt(nList.item(6+q).getTextContent().trim()));
-        stats.setAssists(Integer.parseInt(nList.item(7+q).getTextContent().trim()));
-        stats.setTurnovers(Integer.parseInt(nList.item(8+q).getTextContent().trim()));
-        stats.setSteals(Integer.parseInt(nList.item(9+q).getTextContent().trim()));
-        stats.setBlocks(Integer.parseInt(nList.item(10+q).getTextContent().trim()));
-        stats.setFouls(Integer.parseInt(nList.item(11+q).getTextContent().trim()));
-        stats.setPoints(Integer.parseInt(nList.item(12+q).getTextContent().trim()));
+        stats.replace("fieldGoals",Double.parseDouble(nList.item(2).getTextContent().trim().split("-")[0].trim()));
+        stats.replace("fieldGoalsAttempts",Double.parseDouble(nList.item(2).getTextContent().trim().split("-")[1].trim()));
+        stats.replace("threePoints",Double.parseDouble(nList.item(3).getTextContent().trim().split("-")[0].trim()));
+        stats.replace("threePointsAttempts",Double.parseDouble(nList.item(3).getTextContent().trim().split("-")[1].trim()));
+        stats.replace("freeThrows",Double.parseDouble(nList.item(4).getTextContent().trim().split("-")[0].trim()));
+        stats.replace("freeThrowsAttempts",Double.parseDouble(nList.item(4).getTextContent().trim().split("-")[1].trim()));
+        stats.replace("offensiveRebounds",Double.parseDouble(nList.item(5+q).getTextContent().trim()));
+        stats.replace("rebounds",Double.parseDouble(nList.item(6+q).getTextContent().trim()));
+        stats.replace("assists",Double.parseDouble(nList.item(7+q).getTextContent().trim()));
+        stats.replace("turnovers",Double.parseDouble(nList.item(8+q).getTextContent().trim()));
+        stats.replace("steals",Double.parseDouble(nList.item(9+q).getTextContent().trim()));
+        stats.replace("blocks",Double.parseDouble(nList.item(10+q).getTextContent().trim()));
+        stats.replace("fouls",Double.parseDouble(nList.item(11+q).getTextContent().trim()));
+        stats.replace("points",Double.parseDouble(nList.item(12+q).getTextContent().trim()));
         team.setStats(stats);
     }
 

@@ -16,7 +16,7 @@ public class Game implements Serializable{
     private String id;
     private Team homeTeam;
     private Team awayTeam;
-    private ArrayList<Integer> score;
+    private ArrayList<Double> score;
     private int season;
     private String type;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")

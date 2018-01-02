@@ -11,4 +11,8 @@ public interface PlayerRepository {
     Player findOne(String id);
     
     List<Player> getAllFromCountry(String country);
+
+    List<Player> getAllFromCountryMinGames(String country);
+
+    List<Player> getAllMinGames(boolean u21);
 }

@@ -30,4 +30,39 @@ public class DefaultPlayerService implements PlayerService{
     public List<Player> getAllFromCountry(String country) {
         return playerRepository.getAllFromCountry(country);
     }
+
+    @Override
+    public List<Player> getAllFromCountryForGame(String country) {
+        List<Player> players=playerRepository.getAllFromCountryMinGames(country);
+        return getAverages(players, "game");
+    }
+
+    private List<Player> getAverages(List<Player> players, String type) {
+        players.forEach(player -> {
+            Double divider=type.equals("game")?player.getStats().get("games"):player.getStats().get("minutes")*48;
+            player.getStats().forEach((s, aDouble) -> {
+                if (!s.equals("games"))
+                    player.getStats().replace(s,aDouble/divider);
+            });
+        });
+        return players;
+    }
+
+    @Override
+    public List<Player> getAllFromCountryForMinutes(String country) {
+        List<Player> players=playerRepository.getAllFromCountryMinGames(country);
+        return getAverages(players, "minutes");
+    }
+
+    @Override
+    public List<Player> getAllForGame(boolean u21) {
+        List<Player> players=playerRepository.getAllMinGames(u21);
+        return getAverages(players, "game");
+    }
+
+    @Override
+    public List<Player> getAllForMinutes(boolean u21) {
+        List<Player> players=playerRepository.getAllMinGames(u21);
+        return getAverages(players, "minutes");
+    }
 }

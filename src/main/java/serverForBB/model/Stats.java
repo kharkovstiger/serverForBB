@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Stats {
+    private int games;
     private int minutes;
     private int fieldGoals;
     private int fieldGoalsAttempts;

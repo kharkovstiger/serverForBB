@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @Document
 public class Game implements Serializable{
     @Id
-    private String Id;
+    private String id;
     private Team homeTeam;
     private Team awayTeam;
     private ArrayList<Integer> score;

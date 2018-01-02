@@ -1,6 +1,5 @@
 package serverForBB.service;
 
-import com.sun.org.apache.bcel.internal.generic.ALOAD;
 import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -32,11 +30,13 @@ public class DefaultGameService implements GameService {
     private static final String CODE = "katana";
     private final GameRepository gameRepository;
     private final BBAPIService bbapiService;
+    private final PlayerService playerService;
 
     @Autowired
-    public DefaultGameService(GameRepository gameRepository, BBAPIService bbapiService) {
+    public DefaultGameService(GameRepository gameRepository, BBAPIService bbapiService, PlayerService playerService) {
         this.gameRepository = gameRepository;
         this.bbapiService = bbapiService;
+        this.playerService = playerService;
     }
 
     @Override
@@ -104,11 +104,14 @@ public class DefaultGameService implements GameService {
             Player player=new Player();
             String id=((DeferredElementImpl) nodeList.item(i)).getElementsByTagName("a").item(0)
                     .getAttributes().getNamedItem("href").getTextContent().split("/")[2];
-            player.setId(id);
+            boolean u21=team.getName().split(" ")[team.getName().split(" ").length-1].equals("U21");
+            player.setId(id+(u21?"u21":""));                
+            player.setCountry(team.getName());
             NodeList nList=((DeferredElementImpl) nodeList.item(i)).getElementsByTagName("td");
             if (nList.getLength()>3){
                 int q=nList.getLength()>15?1:0;
                 Stats stats=new Stats();
+                stats.setGames(1);
                 stats.setMinutes(Integer.parseInt(nList.item(2).getTextContent().trim()));
                 stats.setFieldGoals(Integer.parseInt(nList.item(3).getTextContent().trim().split("-")[0].trim()));
                 stats.setFieldGoalsAttempts(Integer.parseInt(nList.item(3).getTextContent().trim().split("-")[1].trim()));
@@ -179,6 +182,11 @@ public class DefaultGameService implements GameService {
 
     @Override
     public Game save(Game game) {
+        boolean exist=gameRepository.exists(game.getId());
+        if (!exist){
+            game.getAwayTeam().getPlayers().forEach(playerService::addStats);
+            game.getHomeTeam().getPlayers().forEach(playerService::addStats);
+        }
         return gameRepository.save(game);
     }
 }

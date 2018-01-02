@@ -16,10 +16,10 @@ import serverForBB.service.GameService;
 import javax.websocket.server.PathParam;
 
 @RestController
-@RequestMapping(value = GameController.REST_URL, produces = MediaType.APPLICATION_XML_VALUE)
+@RequestMapping(value = GameController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin
 public class GameController {
-    static final String REST_URL = "/api/";
+    static final String REST_URL = "/api/game";
     private static final String LOGIN="lnrstgr";
     private static final String CODE="katana";
     
@@ -34,7 +34,7 @@ public class GameController {
         this.bbService = bbService;
     }
     
-    @GetMapping(value = "addGame")
+    @GetMapping(value = "/addGame")
     public ResponseEntity addGame(@PathParam("id") Integer id){
         String response=bbService.getBoxScore(id);
         Game game=gameService.parseBoxScore(response);

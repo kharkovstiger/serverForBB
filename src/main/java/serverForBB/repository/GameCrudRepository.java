@@ -15,4 +15,7 @@ public interface GameCrudRepository extends MongoRepository<Game, String> {
 
     @Override
     Game findOne(String s);
+
+    @Override
+    boolean exists(String s);
 }

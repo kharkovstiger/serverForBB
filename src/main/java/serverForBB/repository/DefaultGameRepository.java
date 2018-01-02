@@ -18,4 +18,9 @@ public class DefaultGameRepository implements GameRepository {
     public Game save(Game game) {
         return gameCrudRepository.save(game);
     }
+
+    @Override
+    public boolean exists(String id) {
+        return gameCrudRepository.exists(id);
+    }
 }

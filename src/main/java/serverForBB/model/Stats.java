@@ -4,8 +4,6 @@ import lombok.Data;
 
 import java.util.Map;
 
-import static javafx.scene.input.KeyCode.T;
-
 @Data
 public class Stats {
     private int games;

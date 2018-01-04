@@ -2,8 +2,16 @@ package serverForBB.repository;
 
 import serverForBB.model.Game;
 
+import java.util.List;
+
 public interface GameRepository {
     Game save(Game game);
 
     boolean exists(String id);
+
+    List<Game> getAllGamesForCountry(String country, boolean official);
+
+    List<Game> getAllGamesForCountryForSeason(String country, boolean official, Integer season);
+
+    List<Game> getAllGamesForCountryAgainstCountry(String s, String s1, boolean official);
 }

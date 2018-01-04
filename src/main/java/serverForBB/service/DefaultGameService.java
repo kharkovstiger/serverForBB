@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -190,5 +191,20 @@ public class DefaultGameService implements GameService {
             game.getHomeTeam().getPlayers().forEach(playerService::addStats);
         }
         return gameRepository.save(game);
+    }
+
+    @Override
+    public List<Game> getAllGamesForCountry(String country, boolean official) {
+        return gameRepository.getAllGamesForCountry(country, official);
+    }
+
+    @Override
+    public List<Game> getAllGamesForCountryForSeason(String country, boolean official, Integer season) {
+        return gameRepository.getAllGamesForCountryForSeason(country,official,season);
+    }
+
+    @Override
+    public List<Game> getAllGamesForCountryAgainstCountry(String s, String s1, boolean official) {
+        return gameRepository.getAllGamesForCountryAgainstCountry(s, s1, official);
     }
 }

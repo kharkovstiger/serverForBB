@@ -5,6 +5,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import serverForBB.service.GameService;
 
+import java.util.Arrays;
+
 @Component
 public class ScheduledTasks {
     
@@ -16,17 +18,20 @@ public class ScheduledTasks {
     }
 
 //    @Scheduled(cron = "0 0 2 ? * 2")
-    @Scheduled(cron = "0 5 18 ? * *")
+    @Scheduled(cron = "0 15 18 ? * *")
     public void addGames(){
 //        Integer maxId= Integer.valueOf(gameService.getMaxId());
         Integer maxId=372;
         boolean flag=true;
         while (flag){
             try {
-                gameService.addGame(++maxId);    
+                gameService.addGame(++maxId);
+                System.err.println("Added game with ID: "+maxId);
             }
             catch (ArrayIndexOutOfBoundsException e){
-                flag=false;
+                System.err.println(Arrays.toString(e.getStackTrace()));
+                if (maxId>44500)
+                    flag=false;
             }
         }
     }

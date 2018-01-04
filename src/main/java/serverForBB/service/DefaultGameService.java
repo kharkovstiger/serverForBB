@@ -256,12 +256,16 @@ public class DefaultGameService implements GameService {
         Stats.initialize(stats, Team.class.getName());
         games.forEach(game -> {
             if (game.getAwayTeam().getName().equals(country)) {
-                game.getAwayTeam().getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
+                addStat(game.getAwayTeam(), stats);
             } else {
-                game.getHomeTeam().getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
+                addStat(game.getHomeTeam(), stats);
             }
         });
         stats.forEach((s, aDouble) -> stats.replace(s,aDouble/games.size()));
         return stats;
+    }
+    
+    private void addStat(Team team, Map<String, Double> stats){
+        team.getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
     }
 }

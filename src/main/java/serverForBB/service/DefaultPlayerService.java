@@ -2,9 +2,12 @@ package serverForBB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import serverForBB.model.Game;
 import serverForBB.model.Player;
+import serverForBB.model.Team;
 import serverForBB.repository.PlayerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,7 +40,8 @@ public class DefaultPlayerService implements PlayerService{
         return getAverages(players, "game");
     }
 
-    private List<Player> getAverages(List<Player> players, String type) {
+    @Override
+    public List<Player> getAverages(List<Player> players, String type) {
         players.forEach(player -> {
             Double divider=type.equals("game")?player.getStats().get("games"):player.getStats().get("minutes")*48;
             player.getStats().forEach((s, aDouble) -> {
@@ -64,5 +68,30 @@ public class DefaultPlayerService implements PlayerService{
     public List<Player> getAllForMinutes(boolean u21) {
         List<Player> players=playerRepository.getAllMinGames(u21);
         return getAverages(players, "minutes");
+    }
+
+    @Override
+    public List<Player> getPlayersStatForGameList(List<Game> games, String country) {
+        List<Player> players=new ArrayList<>();
+        games.forEach(game -> {
+            if (game.getAwayTeam().getName().equals(country)) {
+                addStat(game.getAwayTeam(), players);
+            } else {
+                addStat(game.getHomeTeam(), players);
+            }
+        });
+        return players;
+    }
+
+    private void addStat(Team team, List<Player> players) {
+        team.getPlayers().forEach(player -> {
+            Player existPlayer=players.stream().filter(player1 -> player1.equals(player)).findFirst().orElse(null);
+            if (existPlayer != null) {
+                existPlayer.getStats().forEach((s, aDouble) -> existPlayer.getStats().
+                        replace(s,existPlayer.getStats().get(s)+player.getStats().get(s)));
+            }
+            else 
+                players.add(player);
+        });
     }
 }

@@ -1,5 +1,6 @@
 package serverForBB.service;
 
+import serverForBB.model.Game;
 import serverForBB.model.Player;
 
 import java.util.List;
@@ -17,4 +18,8 @@ public interface PlayerService {
     List<Player> getAllForGame(boolean u21);
 
     List<Player> getAllForMinutes(boolean u21);
+
+    List<Player> getPlayersStatForGameList(List<Game> games, String country);
+
+    List<Player> getAverages(List<Player> players, String game);
 }

@@ -3,7 +3,9 @@ package serverForBB.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import serverForBB.model.Game;
 import serverForBB.model.Player;
+import serverForBB.model.StatRequest;
 import serverForBB.service.PlayerService;
 
 import javax.websocket.server.PathParam;
@@ -44,5 +46,22 @@ public class PlayerController {
     @GetMapping(value = "/getAllForMinutes")
     public List<Player> getAllForMinutes(@PathParam("u21") boolean u21){
         return playerService.getAllForMinutes(u21);
+    }
+    
+    @PostMapping(value = "/getPlayersStatForGameList")
+    public List<Player> getPlayersStatForGameList(@RequestBody StatRequest request){
+        return playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
+    }
+
+    @PostMapping(value = "/getPlayersStatForGameListPerGame")
+    public List<Player> getPlayersStatForGameListPerGame(@RequestBody StatRequest request){
+        List<Player> players=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
+        return playerService.getAverages(players, "game");
+    }
+
+    @PostMapping(value = "/getPlayersStatForGameListPerMinutes")
+    public List<Player> getPlayersStatForGameListPerMinutes(@RequestBody StatRequest request){
+        List<Player> players=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
+        return playerService.getAverages(players, "game");
     }
 }

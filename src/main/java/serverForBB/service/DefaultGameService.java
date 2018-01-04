@@ -62,7 +62,6 @@ public class DefaultGameService implements GameService {
         for (int i = flag+3; i <temp.length ; i++) {
             type+=temp[i]+" ";
         }
-        game.setType(type.trim());
         String temp1="<?xml version=\"1.0\" encoding=\"utf-8\"?><table" + response.split("<table|table>")[15] + "table>";
         String away=temp1.replace("&nbsp;","x");
         Team awayTeam=new Team();
@@ -79,6 +78,15 @@ public class DefaultGameService implements GameService {
         ArrayList<Double> score=new ArrayList<>();
         score.add(awayTeam.getStats().get("points"));
         score.add(homeTeam.getStats().get("points"));
+        if (type.contains("Tournament"))
+            type="Consolation Tournament";
+        else if (type.contains("Robin") || type.contains("inal")){
+            if (game.getSeason()%2==(game.getAwayTeam().getName().matches(".*\\d+.*")?0:1))
+                type="Euro Champs";
+            else
+                type="World Champs";
+        }
+        game.setType(type.trim());
         game.setScore(score);
         return game;
     }

@@ -14,4 +14,6 @@ public interface GameService {
     List<Game> getAllGamesForCountryForSeason(String country, boolean official, Integer season);
 
     List<Game> getAllGamesForCountryAgainstCountry(String s, String s1, boolean official);
+
+    List<Game> getGamesForList(List<String> ids);
 }

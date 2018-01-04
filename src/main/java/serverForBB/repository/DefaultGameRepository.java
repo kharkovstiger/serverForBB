@@ -42,4 +42,9 @@ public class DefaultGameRepository implements GameRepository {
         return official?gameCrudRepository.getAllOfficialGamesForCountryAgainstCountry(s, s1)
                 :gameCrudRepository.getAllGamesForCountryAgainstCountry(s, s1);
     }
+
+    @Override
+    public List<Game> getGamesForList(List<String> ids) {
+        return gameCrudRepository.findAll(ids);
+    }
 }

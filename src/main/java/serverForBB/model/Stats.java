@@ -6,24 +6,7 @@ import java.util.Map;
 
 @Data
 public class Stats {
-    private int games;
-    private int minutes;
-    private int fieldGoals;
-    private int fieldGoalsAttempts;
-    private int threePoints;
-    private int threePointsAttempts;
-    private int freeThrows;
-    private int freeThrowsAttempts;
-    private int plusMinus;
-    private int offensiveRebounds;
-    private int rebounds;
-    private int assists;
-    private int turnovers;
-    private int steals;
-    private int blocks;
-    private int fouls;
-    private int points;
-
+    
     public static void initialize(Map<String, Double> stats, String className){
         try {
             Class clas=Class.forName(className);
@@ -31,6 +14,7 @@ public class Stats {
                 stats.put("games",0.);
                 stats.put("minutes",0.);
                 stats.put("plusMinus",0.);
+                stats.put("doubleDouble",0.);
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

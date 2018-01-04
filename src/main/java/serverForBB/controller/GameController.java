@@ -52,8 +52,13 @@ public class GameController {
         return gameService.getAllGamesForCountryForSeason(country, official, season);
     }
 
-    @PostMapping(value = "/allGamesForCountryAgainstCountry/{official}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/allGamesForCountryAgainstCountry/{official}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getAllGamesForCountryAgainstCountry(@RequestBody List<String> countries, @PathVariable("official") boolean official){
         return gameService.getAllGamesForCountryAgainstCountry(countries.get(0), countries.get(1), official);
+    }
+
+    @PostMapping(value = "/gamesForList", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Game> getGamesForList(@RequestBody List<String> ids){
+        return gameService.getGamesForList(ids);
     }
 }

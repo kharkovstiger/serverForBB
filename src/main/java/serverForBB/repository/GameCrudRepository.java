@@ -15,6 +15,9 @@ public interface GameCrudRepository extends MongoRepository<Game, String> {
     List<Game> findAll();
 
     @Override
+    List<Game> findAll(Iterable<String> ids);
+
+    @Override
     Game findOne(String s);
 
     @Override

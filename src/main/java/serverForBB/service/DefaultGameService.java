@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class DefaultGameService implements GameService {
@@ -138,6 +139,7 @@ public class DefaultGameService implements GameService {
                 stats.replace("blocks",Double.parseDouble(nList.item(11+q).getTextContent().trim()));
                 stats.replace("fouls",Double.parseDouble(nList.item(12+q).getTextContent().trim()));
                 stats.replace("points",Double.parseDouble(nList.item(13+q).getTextContent().trim()));
+                stats.replace("doubleDouble",isDD(stats)==2?1.:0.);
                 player.setStats(stats);
                 String playerString=bbapiService.getPlayer(id, LOGIN, CODE);
                 doc=getDocument(playerString);
@@ -148,6 +150,12 @@ public class DefaultGameService implements GameService {
                 team.addPlayer(player);
             }
         }
+    }
+
+    private int isDD(Map<String, Double> stats) {
+        final int[] c = {0};
+        stats.forEach((s, aDouble) -> c[0] +=(aDouble >= 10 ? 1 : 0));
+        return c[0];
     }
 
     private Document getDocument(String s){
@@ -214,5 +222,10 @@ public class DefaultGameService implements GameService {
     @Override
     public List<Game> getAllGamesForCountryAgainstCountry(String s, String s1, boolean official) {
         return gameRepository.getAllGamesForCountryAgainstCountry(s, s1, official);
+    }
+
+    @Override
+    public List<Game> getGamesForList(List<String> ids) {
+        return gameRepository.getGamesForList(ids);
     }
 }

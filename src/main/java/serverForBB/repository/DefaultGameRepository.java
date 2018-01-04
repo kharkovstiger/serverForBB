@@ -54,6 +54,6 @@ public class DefaultGameRepository implements GameRepository {
     public Game getMaxId() {
         List<Game> games=gameCrudRepository.findAll();
         games.sort(Comparator.comparing(o -> Integer.valueOf(o.getId())));
-        return games.get(0);
+        return games.get(games.size()-1);
     }
 }

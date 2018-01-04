@@ -6,12 +6,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Game;
+import serverForBB.model.Stats;
 import serverForBB.service.BBAPIService;
 import serverForBB.service.BBService;
 import serverForBB.service.GameService;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = GameController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,5 +60,10 @@ public class GameController {
     public List<Game> getGamesForList(@RequestBody List<String> ids){
         gameService.getMaxId();
         return gameService.getGamesForList(ids);
+    }
+
+    @PostMapping(value = "/getSeasonsStatisticsForCountry/{season}")
+    public Map<String, Double> getSeasonsStatisticsForCountry(@RequestBody String country, @PathVariable("season") Integer season){
+        return gameService.getSeasonStatisticsForCountry(country, season);
     }
 }

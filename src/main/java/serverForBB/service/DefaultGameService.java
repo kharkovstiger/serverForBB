@@ -14,6 +14,7 @@ import serverForBB.model.Stats;
 import serverForBB.model.Team;
 import serverForBB.repository.GameRepository;
 
+import javax.print.DocFlavor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -241,5 +242,21 @@ public class DefaultGameService implements GameService {
         Game game=parseBoxScore(response);
         game.setId(String.valueOf(id));
         save(game);
+    }
+
+    @Override
+    public Map<String, Double> getSeasonStatisticsForCountry(String country, Integer season) {
+        List<Game> games=gameRepository.getAllGamesForCountryForSeason(country, true, season);
+        Map<String, Double> stats=new HashMap<>();
+        Stats.initialize(stats, Team.class.getName());
+        games.forEach(game -> {
+            if (game.getAwayTeam().getName().equals(country)) {
+                game.getAwayTeam().getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
+            } else {
+                game.getHomeTeam().getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
+            }
+        });
+        stats.forEach((s, aDouble) -> stats.replace(s,aDouble/games.size()));
+        return stats;
     }
 }

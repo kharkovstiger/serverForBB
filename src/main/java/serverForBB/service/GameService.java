@@ -3,6 +3,7 @@ package serverForBB.service;
 import serverForBB.model.Game;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GameService {
     Game parseBoxScore(String response);
@@ -20,4 +21,6 @@ public interface GameService {
     String getMaxId();
 
     void addGame(Integer id);
+
+    Map<String,Double> getSeasonStatisticsForCountry(String country, Integer season);
 }

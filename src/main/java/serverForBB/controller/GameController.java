@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Game;
+import serverForBB.model.StatRequest;
 import serverForBB.model.Stats;
 import serverForBB.service.BBAPIService;
 import serverForBB.service.BBService;
@@ -66,4 +67,9 @@ public class GameController {
     public Map<String, Double> getSeasonsStatisticsForCountry(@RequestBody String country, @PathVariable("season") Integer season){
         return gameService.getSeasonStatisticsForCountry(country, season);
     }
+    
+    @PostMapping(value = "/getAveragedStatistics")
+    public Map<String, Double> getAveragedStatistics(@RequestBody StatRequest request){
+        return gameService.getAveragedStatistics(request.getGames(), request.getCountry());
+    } 
 }

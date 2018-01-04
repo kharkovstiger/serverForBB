@@ -247,6 +247,11 @@ public class DefaultGameService implements GameService {
     @Override
     public Map<String, Double> getSeasonStatisticsForCountry(String country, Integer season) {
         List<Game> games=gameRepository.getAllGamesForCountryForSeason(country, true, season);
+        return getAveragedStatistics(games, country);
+    }
+
+    @Override
+    public Map<String, Double> getAveragedStatistics(List<Game> games, String country) {
         Map<String, Double> stats=new HashMap<>();
         Stats.initialize(stats, Team.class.getName());
         games.forEach(game -> {

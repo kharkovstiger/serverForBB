@@ -23,4 +23,6 @@ public interface GameService {
     void addGame(Integer id);
 
     Map<String,Double> getSeasonStatisticsForCountry(String country, Integer season);
+
+    Map<String,Double> getAveragedStatistics(List<Game> games, String country);
 }

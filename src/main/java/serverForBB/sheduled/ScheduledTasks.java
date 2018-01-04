@@ -16,7 +16,7 @@ public class ScheduledTasks {
     }
 
 //    @Scheduled(cron = "0 0 2 ? * 2")
-    @Scheduled(cron = "0 0 2 ? * *")
+    @Scheduled(cron = "0 0 20 ? * *")
     public void addGames(){
         Integer maxId= Integer.valueOf(gameService.getMaxId());
         boolean flag=true;

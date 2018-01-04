@@ -1,5 +1,6 @@
 package serverForBB.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import serverForBB.model.Game;
@@ -40,4 +41,7 @@ public interface GameCrudRepository extends MongoRepository<Game, String> {
 
     @Query(value = "{$or:[{'homeTeam.name':?0, 'awayTeam.name':?1}, {'homeTeam.name':?1, 'awayTeam.name':?0}]}")
     List<Game> getAllGamesForCountryAgainstCountry(String s, String s1);
+
+    @Query(value = "{$sort:{'id':-1}, $limit:1}")
+    Game findMaxId();
 }

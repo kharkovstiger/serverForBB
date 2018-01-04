@@ -16,4 +16,8 @@ public interface GameService {
     List<Game> getAllGamesForCountryAgainstCountry(String s, String s1, boolean official);
 
     List<Game> getGamesForList(List<String> ids);
+    
+    String getMaxId();
+
+    void addGame(Integer id);
 }

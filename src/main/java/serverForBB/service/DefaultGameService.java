@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class DefaultGameService implements GameService {
@@ -34,12 +33,14 @@ public class DefaultGameService implements GameService {
     private static final String CODE = "katana";
     private final GameRepository gameRepository;
     private final BBAPIService bbapiService;
+    private final BBService bbService;
     private final PlayerService playerService;
 
     @Autowired
-    public DefaultGameService(GameRepository gameRepository, BBAPIService bbapiService, PlayerService playerService) {
+    public DefaultGameService(GameRepository gameRepository, BBAPIService bbapiService, BBService bbService, PlayerService playerService) {
         this.gameRepository = gameRepository;
         this.bbapiService = bbapiService;
+        this.bbService = bbService;
         this.playerService = playerService;
     }
 
@@ -227,5 +228,18 @@ public class DefaultGameService implements GameService {
     @Override
     public List<Game> getGamesForList(List<String> ids) {
         return gameRepository.getGamesForList(ids);
+    }
+
+    @Override
+    public String getMaxId() {
+        return gameRepository.getMaxId().getId();
+    }
+
+    @Override
+    public void addGame(Integer id) {
+        String response=bbService.getBoxScore(id);
+        Game game=parseBoxScore(response);
+        game.setId(String.valueOf(id));
+        save(game);
     }
 }

@@ -34,10 +34,7 @@ public class GameController {
     
     @GetMapping(value = "/addGame")
     public ResponseEntity addGame(@PathParam("id") Integer id){
-        String response=bbService.getBoxScore(id);
-        Game game=gameService.parseBoxScore(response);
-        game.setId(String.valueOf(id));
-        gameService.save(game);
+        gameService.addGame(id);
         return new ResponseEntity(HttpStatus.OK);
     }
     
@@ -59,6 +56,7 @@ public class GameController {
 
     @PostMapping(value = "/gamesForList", consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getGamesForList(@RequestBody List<String> ids){
+        gameService.getMaxId();
         return gameService.getGamesForList(ids);
     }
 }

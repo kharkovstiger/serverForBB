@@ -18,11 +18,11 @@ public class ScheduledTasks {
     }
 
 //    @Scheduled(cron = "0 0 2 ? * 2")
-    @Scheduled(cron = "0 5 8 ? * *")
+    @Scheduled(cron = "0 11 8 ? * *")
     public void addGames(){
-        Integer maxId= Integer.valueOf(gameService.getMaxId());
+//        Integer maxId= Integer.valueOf(gameService.getMaxId());
         System.err.println("Begin to add new games");
-//        Integer maxId=372;
+        Integer maxId=9398;
         boolean flag=true;
         while (flag){
             try {

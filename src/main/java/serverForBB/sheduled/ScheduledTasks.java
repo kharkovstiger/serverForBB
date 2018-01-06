@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class ScheduledTasks {
     
     private final GameService gameService;
+    private final int MIN_MAX_ID=373;
 
     @Autowired
     public ScheduledTasks(GameService gameService) {
@@ -18,11 +19,11 @@ public class ScheduledTasks {
     }
 
 //    @Scheduled(cron = "0 0 2 ? * 2")
-    @Scheduled(cron = "0 22 14 ? * *")
+    @Scheduled(cron = "0 13 15 ? * *")
     public void addGames(){
 //        Integer maxId= Integer.valueOf(gameService.getMaxId());
         System.err.println("Begin to add new games");
-        Integer maxId=22499;
+        Integer maxId=373;
         boolean flag=true;
         while (flag){
             try {

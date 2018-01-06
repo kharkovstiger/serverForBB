@@ -8,10 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import serverForBB.model.Game;
-import serverForBB.model.Player;
-import serverForBB.model.Stats;
-import serverForBB.model.Team;
+import serverForBB.model.*;
 import serverForBB.repository.GameRepository;
 
 import javax.print.DocFlavor;
@@ -48,7 +45,7 @@ public class DefaultGameService implements GameService {
     @Override
     public Game parseBoxScore(String response) {
         Game game=new Game();
-        String[] temp=response.split("<title>|<\\/title>")[1].trim().split(" ");
+        String[] temp=response.split("<title>|</title>")[1].trim().split(" ");
         int flag = 0;
         for (int i = 0; i <temp.length ; i++) {
             if (temp[i].contains("/")) {
@@ -239,9 +236,17 @@ public class DefaultGameService implements GameService {
     @Override
     public void addGame(Integer id) {
         String response=bbService.getBoxScore(id);
+        final boolean[] flag = {false};
+        Countries.countries.forEach(s -> {
+            if (response.contains(s))
+                flag[0] =true;
+        });
+        if (!flag[0])
+            return;
         Game game=parseBoxScore(response);
         game.setId(String.valueOf(id));
-        save(game);
+        if (Countries.countries.contains(game.getAwayTeam().getName()) || Countries.countries.contains(game.getHomeTeam().getName()))
+            save(game);
     }
 
     @Override

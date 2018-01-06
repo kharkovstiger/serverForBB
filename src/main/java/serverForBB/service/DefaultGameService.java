@@ -245,7 +245,7 @@ public class DefaultGameService implements GameService {
             return;
         Game game=parseBoxScore(response);
         game.setId(String.valueOf(id));
-        if (Countries.countries.contains(game.getAwayTeam().getName()) || Countries.countries.contains(game.getHomeTeam().getName()))
+//        if (Countries.countries.contains(game.getAwayTeam().getName()) || Countries.countries.contains(game.getHomeTeam().getName()))
             save(game);
     }
 

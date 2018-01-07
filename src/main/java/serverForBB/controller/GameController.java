@@ -58,7 +58,6 @@ public class GameController {
 
     @PostMapping(value = "/gamesForList", consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getGamesForList(@RequestBody List<String> ids){
-        gameService.getMaxId(season);
         return gameService.getGamesForList(ids);
     }
 

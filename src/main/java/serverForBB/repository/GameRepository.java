@@ -17,5 +17,7 @@ public interface GameRepository {
 
     List<Game> getGamesForList(List<String> ids);
 
-    Game getMaxId();
+    Game getMaxId(int season);
+
+    List<Game> getAllGamesForSeason(int season);
 }

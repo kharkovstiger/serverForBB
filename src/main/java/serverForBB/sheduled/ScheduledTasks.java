@@ -1,11 +1,16 @@
 package serverForBB.sheduled;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import serverForBB.model.Game;
 import serverForBB.service.GameService;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 @Component
 public class ScheduledTasks {
@@ -18,21 +23,23 @@ public class ScheduledTasks {
         this.gameService = gameService;
     }
 
-//    @Scheduled(cron = "0 0 2 ? * 2")
-    @Scheduled(cron = "0 48 6 ? * *")
+    @Scheduled(cron = "0 0 4 ? * 2")
+//    @Scheduled(cron = "0 48 6 ? * *")
     public void addGames(){
-//        Integer maxId= Integer.valueOf(gameService.getMaxId());
+        int season=gameService.getSeason(LocalDate.now());
+        final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
+        Integer id=maxId;
         System.err.println("Begin to add new games");
-        Integer maxId=20733;
+//        Integer maxId=20733;
         boolean flag=true;
         while (flag){
             try {
-                gameService.addGame(++maxId);
+                gameService.addGame(++id);
                 System.err.println("Added game with ID: "+maxId);
             }
             catch (ArrayIndexOutOfBoundsException e){
                 System.err.println(Arrays.toString(e.getStackTrace()));
-                if (maxId>44500)
+                if (id-maxId>1500)
                     flag=false;
             }
         }

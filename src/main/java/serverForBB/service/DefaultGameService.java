@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import serverForBB.model.*;
 import serverForBB.repository.GameRepository;
 
-import javax.print.DocFlavor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -91,7 +90,8 @@ public class DefaultGameService implements GameService {
         return game;
     }
 
-    private int getSeason(LocalDate localDate) {
+    @Override
+    public int getSeason(LocalDate localDate) {
         String xml=bbapiService.getSeasons(LOGIN, CODE);
         Document doc=getDocument(xml);
         NodeList nodeList=doc.getElementsByTagName("season");
@@ -104,7 +104,7 @@ public class DefaultGameService implements GameService {
                 return Integer.parseInt(((DeferredElementImpl) nodeList.item(i)).getAttribute("id"));
             }
         }
-        return Integer.parseInt(nodeList.item(nodeList.getLength()).getAttributes().getNamedItem("id").getTextContent());
+        return Integer.parseInt(nodeList.item(nodeList.getLength()-1).getAttributes().getNamedItem("id").getTextContent());
     }
 
     private void setPlayersStats(Team team, String xml) {
@@ -229,8 +229,9 @@ public class DefaultGameService implements GameService {
     }
 
     @Override
-    public String getMaxId() {
-        return gameRepository.getMaxId().getId();
+    public String getMaxId(int season) {
+        Game game=gameRepository.getMaxId(season);
+        return game==null?"0":game.getId();
     }
 
     @Override
@@ -241,8 +242,8 @@ public class DefaultGameService implements GameService {
             if (response.contains(s))
                 flag[0] =true;
         });
-        if (!flag[0])
-            return;
+//        if (!flag[0])
+//            return;
         Game game=parseBoxScore(response);
         game.setId(String.valueOf(id));
 //        if (Countries.countries.contains(game.getAwayTeam().getName()) || Countries.countries.contains(game.getHomeTeam().getName()))
@@ -269,7 +270,12 @@ public class DefaultGameService implements GameService {
         stats.forEach((s, aDouble) -> stats.replace(s,aDouble/games.size()));
         return stats;
     }
-    
+
+    @Override
+    public List<Game> getAllGamesForSeason(int season) {
+        return gameRepository.getAllGamesForSeason(season);
+    }
+
     private void addStat(Team team, Map<String, Double> stats){
         team.getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
     }

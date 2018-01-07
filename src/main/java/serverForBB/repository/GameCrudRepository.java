@@ -44,4 +44,7 @@ public interface GameCrudRepository extends MongoRepository<Game, String> {
 
     @Query(value = "{$sort:{'id':-1}, $limit:1}")
     Game findMaxId();
+
+    @Query(value = "{'season':?0}")
+    List<Game> getAllGamesForSeason(int season);
 }

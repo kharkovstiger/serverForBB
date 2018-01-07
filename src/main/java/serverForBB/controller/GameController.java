@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Game;
 import serverForBB.model.StatRequest;
-import serverForBB.model.Stats;
 import serverForBB.service.BBAPIService;
 import serverForBB.service.BBService;
 import serverForBB.service.GameService;
@@ -59,7 +58,7 @@ public class GameController {
 
     @PostMapping(value = "/gamesForList", consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getGamesForList(@RequestBody List<String> ids){
-        gameService.getMaxId();
+        gameService.getMaxId(season);
         return gameService.getGamesForList(ids);
     }
 

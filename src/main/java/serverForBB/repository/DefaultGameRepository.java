@@ -1,7 +1,6 @@
 package serverForBB.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import serverForBB.model.Game;
 
@@ -51,9 +50,16 @@ public class DefaultGameRepository implements GameRepository {
     }
 
     @Override
-    public Game getMaxId() {
-        List<Game> games=gameCrudRepository.findAll();
+    public Game getMaxId(int season) {
+        List<Game> games=gameCrudRepository.getAllGamesForSeason(season);
+        if (games==null)
+            return null;
         games.sort(Comparator.comparing(o -> Integer.valueOf(o.getId())));
-        return games.get(games.size()-1);
+        return games.get(0);
+    }
+
+    @Override
+    public List<Game> getAllGamesForSeason(int season) {
+        return gameCrudRepository.getAllGamesForSeason(season);
     }
 }

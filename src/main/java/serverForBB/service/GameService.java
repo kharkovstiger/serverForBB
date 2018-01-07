@@ -2,11 +2,14 @@ package serverForBB.service;
 
 import serverForBB.model.Game;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public interface GameService {
     Game parseBoxScore(String response);
+
+    int getSeason(LocalDate localDate);
 
     Game save(Game game);
 
@@ -18,11 +21,13 @@ public interface GameService {
 
     List<Game> getGamesForList(List<String> ids);
     
-    String getMaxId();
+    String getMaxId(int season);
 
     void addGame(Integer id);
 
     Map<String,Double> getSeasonStatisticsForCountry(String country, Integer season);
 
     Map<String,Double> getAveragedStatistics(List<Game> games, String country);
+
+    List<Game> getAllGamesForSeason(int season);
 }

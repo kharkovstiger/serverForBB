@@ -19,6 +19,6 @@ public class Game implements Serializable{
     private ArrayList<Double> score;
     private int season;
     private String type;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
     private LocalDate date;
 }

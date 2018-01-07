@@ -32,6 +32,7 @@ public class DefaultGameService implements GameService {
     private final BBAPIService bbapiService;
     private final BBService bbService;
     private final PlayerService playerService;
+    private final DateTimeFormatter FORMATTER=DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     public DefaultGameService(GameRepository gameRepository, BBAPIService bbapiService, BBService bbService, PlayerService playerService) {
@@ -95,11 +96,10 @@ public class DefaultGameService implements GameService {
         String xml=bbapiService.getSeasons(LOGIN, CODE);
         Document doc=getDocument(xml);
         NodeList nodeList=doc.getElementsByTagName("season");
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
         for (int i = 0; i <nodeList.getLength()-1 ; i++) {
             String s=((DeferredElementImpl) nodeList.item(i)).getElementsByTagName("finish").item(0)
                     .getTextContent().split("T")[0];
-            LocalDate date=LocalDate.parse(s, formatter);
+            LocalDate date=LocalDate.parse(s, FORMATTER);
             if (localDate.isBefore(date)){
                 return Integer.parseInt(((DeferredElementImpl) nodeList.item(i)).getAttribute("id"));
             }

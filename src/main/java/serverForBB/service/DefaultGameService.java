@@ -260,11 +260,14 @@ public class DefaultGameService implements GameService {
     public Map<String, Double> getAveragedStatistics(List<Game> games, String country) {
         Map<String, Double> stats=new HashMap<>();
         Stats.initialize(stats, Team.class.getName());
+        stats.put("pointsAgainst",0.);
         games.forEach(game -> {
             if (game.getAwayTeam().getName().equals(country)) {
                 addStat(game.getAwayTeam(), stats);
+                stats.replace("pointsAgainst",stats.get("pointsAgainst")+ game.getScore().get(1));
             } else {
                 addStat(game.getHomeTeam(), stats);
+                stats.replace("pointsAgainst",stats.get("pointsAgainst")+ game.getScore().get(0));
             }
         });
         stats.forEach((s, aDouble) -> stats.replace(s,aDouble/games.size()));

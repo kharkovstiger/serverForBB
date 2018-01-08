@@ -2,10 +2,7 @@ package serverForBB.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import serverForBB.service.BBService;
 
@@ -26,20 +23,20 @@ public class BBController {
         this.bbService = bbService;
     }
 
-    @GetMapping(value = "/country")
-    public ResponseEntity<String> country(){
+    @GetMapping(value = "/country/{country}")
+    public ResponseEntity<String> country(@PathVariable("country") Integer country){
 
         ResponseEntity<String> responseJson=
-                restTemplate.getForEntity(BASE_URL + "/country/33/overview.aspx", String.class);
+                restTemplate.getForEntity(BASE_URL + "/country/"+country+"/overview.aspx", String.class);
 
         return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/cup")
-    public ResponseEntity<String> cup(@PathParam("season") String season){
+    public ResponseEntity<String> cup(@PathParam("season") String season, @PathParam("country") Integer country){
 
         ResponseEntity<String> responseJson=
-                restTemplate.getForEntity(BASE_URL + "/country/33/cup.aspx?season="+season, String.class);
+                restTemplate.getForEntity(BASE_URL + "/country/"+country+"/cup.aspx?season="+season, String.class);
 
         return new ResponseEntity<>(responseJson.getBody(), HttpStatus.OK);
     }

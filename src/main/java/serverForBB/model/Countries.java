@@ -1,15 +1,17 @@
 package serverForBB.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Countries {
 
-    public final static List<String> countries = new ArrayList<>();
+    public final static Map<String, Integer> countries = new HashMap<>();
     static {
-        countries.add("Ukraina");
-        countries.add("Rossiya");
-        countries.add("Belarus");
+        countries.put("Ukraina", 33);
+        countries.put("Rossiya", 19);
+        countries.put("Belarus", 85);
     }
 
 }

@@ -238,12 +238,12 @@ public class DefaultGameService implements GameService {
     public void addGame(Integer id) {
         String response=bbService.getBoxScore(id);
         final boolean[] flag = {false};
-        Countries.countries.forEach(s -> {
+        Countries.countries.forEach((s, integer) -> {
             if (response.contains(s))
                 flag[0] =true;
         });
-//        if (!flag[0])
-//            return;
+        if (!flag[0])
+            return;
         Game game=parseBoxScore(response);
         game.setId(String.valueOf(id));
 //        if (Countries.countries.contains(game.getAwayTeam().getName()) || Countries.countries.contains(game.getHomeTeam().getName()))

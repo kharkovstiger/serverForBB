@@ -43,7 +43,7 @@ public class DefaultPlayerService implements PlayerService{
     @Override
     public List<Player> getAverages(List<Player> players, String type) {
         players.forEach(player -> {
-            Double divider=type.equals("game")?player.getStats().get("games"):player.getStats().get("minutes")*48;
+            Double divider=type.equals("game")?player.getStats().get("games"):player.getStats().get("minutes")/48;
             player.getStats().forEach((s, aDouble) -> {
                 if (!s.equals("games"))
                     player.getStats().replace(s,aDouble/divider);

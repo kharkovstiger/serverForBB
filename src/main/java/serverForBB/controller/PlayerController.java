@@ -62,6 +62,6 @@ public class PlayerController {
     @PostMapping(value = "/getPlayersStatForGameListPerMinutes")
     public List<Player> getPlayersStatForGameListPerMinutes(@RequestBody StatRequest request){
         List<Player> players=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
-        return playerService.getAverages(players, "game");
+        return playerService.getAverages(players, "minutes");
     }
 }

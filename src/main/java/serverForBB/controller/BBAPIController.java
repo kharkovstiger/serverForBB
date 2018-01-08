@@ -28,10 +28,10 @@ public class BBAPIController {
     }
 
     @GetMapping(value = "/login")
-    public ResponseEntity<String> login(@PathParam("login") String login, @PathParam("code") String code, @PathParam("quickinfo") Integer info){
-        if (info==null)
-            info=0;
-        return bbapiService.login(login, code, info);
+    public ResponseEntity<String> login(@PathParam("login") String login, @PathParam("code") String code, @PathParam("quickinfo") Integer quickinfo){
+        if (quickinfo==null)
+            quickinfo=0;
+        return bbapiService.login(login, code, quickinfo);
     }
 
     @GetMapping(value = "/player")

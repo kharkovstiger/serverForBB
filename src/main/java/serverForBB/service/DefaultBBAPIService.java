@@ -25,8 +25,7 @@ public class DefaultBBAPIService implements BBAPIService {
                 restTemplate.getForEntity(BBAPIController.BASE_URL + "/login.aspx?login="+login+"&code="+code+"&quickinfo="+info, String.class);
         HttpHeaders headers=responseJson.getHeaders();
         ArrayList<String> cookies=new ArrayList<>();
-        cookies.add(headers.get("Set-Cookie").get(0).split(";")[0]);
-        cookies.add(headers.get("Set-Cookie").get(1).split(";")[0]);
+        headers.get("Set-Cookie").forEach(s -> cookies.add(s.split(";")[0]));
 
         HttpHeaders newHeaders=new HttpHeaders();
         newHeaders.put("Cookie",cookies);

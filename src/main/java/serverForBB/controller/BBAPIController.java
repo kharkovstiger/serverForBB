@@ -28,8 +28,10 @@ public class BBAPIController {
     }
 
     @GetMapping(value = "/login")
-    public ResponseEntity<String> login(@PathParam("login") String login, @PathParam("code") String code){
-        return bbapiService.login(login, code);
+    public ResponseEntity<String> login(@PathParam("login") String login, @PathParam("code") String code, @PathParam("quickinfo") Integer info){
+        if (info==null)
+            info=0;
+        return bbapiService.login(login, code, info);
     }
 
     @GetMapping(value = "/player")
@@ -39,7 +41,7 @@ public class BBAPIController {
 
     @GetMapping(value = "/country")
     public ResponseEntity<String> country(@PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code,0).getHeaders());
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/countries.aspx", HttpMethod.GET, entity, String.class);
@@ -49,7 +51,7 @@ public class BBAPIController {
 
     @GetMapping(value = "/league")
     public ResponseEntity<String> league(@PathParam("level") Integer level, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code,0).getHeaders());
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/leagues.aspx?countryid=33&level="+level, HttpMethod.GET, entity, String.class);
@@ -59,7 +61,7 @@ public class BBAPIController {
 
     @GetMapping(value = "/standings")
     public ResponseEntity<String> standings(@PathParam("season") Integer season, @PathParam("leagueid") Integer leagueid, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code,0).getHeaders());
 
         ResponseEntity<String> responseJson=null;
         if (season!=null){
@@ -77,7 +79,7 @@ public class BBAPIController {
 
     @GetMapping(value = "/team")
     public ResponseEntity<String> team(@PathParam("id") String id, @PathParam("login") String login, @PathParam("code") String code){
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login,code,0).getHeaders());
 
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BASE_URL + "/teaminfo.aspx?teamid=" + id, HttpMethod.GET, entity, String.class);

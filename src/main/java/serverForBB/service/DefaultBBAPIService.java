@@ -13,16 +13,16 @@ public class DefaultBBAPIService implements BBAPIService {
 
     @Override
     public String getBoxScore(String id, String login, String code) {
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login, code, 0).getHeaders());
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BBAPIController.BASE_URL + "/boxscore.aspx?matchid="+id, HttpMethod.GET, entity, String.class);
         return responseJson.getBody();
     }
 
     @Override
-    public ResponseEntity<String> login(String login, String code) {
+    public ResponseEntity<String> login(String login, String code, Integer info) {
         ResponseEntity<String> responseJson=
-                restTemplate.getForEntity(BBAPIController.BASE_URL + "/login.aspx?login="+login+"&code="+code, String.class);
+                restTemplate.getForEntity(BBAPIController.BASE_URL + "/login.aspx?login="+login+"&code="+code+"&quickinfo="+info, String.class);
         HttpHeaders headers=responseJson.getHeaders();
         ArrayList<String> cookies=new ArrayList<>();
         cookies.add(headers.get("Set-Cookie").get(0).split(";")[0]);
@@ -35,7 +35,7 @@ public class DefaultBBAPIService implements BBAPIService {
 
     @Override
     public String getPlayer(String id, String login, String code) {
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login, code, 0).getHeaders());
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BBAPIController.BASE_URL + "/player.aspx?playerid=" + id, HttpMethod.GET, entity, String.class);
         return responseJson.getBody();
@@ -43,7 +43,7 @@ public class DefaultBBAPIService implements BBAPIService {
 
     @Override
     public String getSeasons(String login, String code) {
-        HttpEntity<String> entity = new HttpEntity<>(login(login,code).getHeaders());
+        HttpEntity<String> entity = new HttpEntity<>(login(login, code, 0).getHeaders());
         ResponseEntity<String> responseJson =
                 restTemplate.exchange(BBAPIController.BASE_URL + "/seasons.aspx", HttpMethod.GET, entity, String.class);
         return responseJson.getBody();

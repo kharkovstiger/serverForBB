@@ -1,6 +1,7 @@
 package serverForBB.service;
 
 import serverForBB.model.Game;
+import serverForBB.model.Results;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,4 +31,6 @@ public interface GameService {
     Map<String,Double> getAveragedStatistics(List<Game> games, String country);
 
     List<Game> getAllGamesForSeason(int season);
+
+    Results getResultsFromGameList(List<Game> games, String s);
 }

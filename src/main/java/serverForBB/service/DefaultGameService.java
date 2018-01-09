@@ -282,6 +282,39 @@ public class DefaultGameService implements GameService {
         return gameRepository.getAllGamesForSeason(season);
     }
 
+    @Override
+    public Results getResultsFromGameList(List<Game> games, String country) {
+        Results results=new Results();
+        games.forEach(game -> {
+            if (game.getAwayTeam().getName().equals(country)) {
+                int pos=game.getScore().get(0)>game.getScore().get(1)?0:1;
+                addResult(results, pos, game.getType());
+            } else {
+                int pos=game.getScore().get(1)>game.getScore().get(0)?0:1;
+                addResult(results, pos, game.getType());
+            }
+        });
+        return results;
+    }
+
+    private void addResult(Results results, int pos, String type){
+        results.add(results.getAll(), pos);
+        switch (type){
+            case "Euro Champs":
+                results.add(results.getContinental(), pos);
+                break;
+            case "Scrimmage":
+                results.add(results.getScrimmage(), pos);
+                break;
+            case "World Champs":
+                results.add(results.getWorld(), pos);
+                break;
+            case "Consolation Tournament":
+                results.add(results.getCt(), pos);
+                break;
+        }
+    }
+    
     private void addStat(Team team, Map<String, Double> stats){
         team.getStats().forEach((s, aDouble) -> stats.replace(s, stats.get(s)+aDouble));
     }

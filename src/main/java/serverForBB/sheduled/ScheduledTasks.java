@@ -23,8 +23,8 @@ public class ScheduledTasks {
         this.gameService = gameService;
     }
 
-//    @Scheduled(cron = "0 0 4 ? * 3")
-    @Scheduled(cron = "0 53 7 ? * *")
+    @Scheduled(cron = "0 0 4 ? * 3")
+//    @Scheduled(cron = "0 53 7 ? * *")
     public void addGames(){
         int season=gameService.getSeason(LocalDate.now());
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
@@ -35,7 +35,7 @@ public class ScheduledTasks {
         while (flag){
             try {
                 gameService.addGame(++id);
-                System.err.println("Added game with ID: "+maxId);
+                System.err.println("Added game with ID: "+id);
             }
             catch (ArrayIndexOutOfBoundsException e){
                 System.err.println(Arrays.toString(e.getStackTrace()));

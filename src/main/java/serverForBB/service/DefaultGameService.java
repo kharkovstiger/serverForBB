@@ -266,11 +266,11 @@ public class DefaultGameService implements GameService {
             if (game.getAwayTeam().getName().equals(country)) {
                 addStat(game.getAwayTeam(), stats);
                 stats.replace("pointsAgainst",stats.get("pointsAgainst")+ game.getScore().get(1));
-                stats.replace("winRate",stats.get("wins")+ game.getScore().get(0)>game.getScore().get(1)?1.:0.);
+                stats.replace("winRate",stats.get("winRate")+ game.getScore().get(0)>game.getScore().get(1)?1.:0.);
             } else {
                 addStat(game.getHomeTeam(), stats);
                 stats.replace("pointsAgainst",stats.get("pointsAgainst")+ game.getScore().get(0));
-                stats.replace("winsRate",stats.get("wins")+ game.getScore().get(1)>game.getScore().get(0)?1.:0.);
+                stats.replace("winRate",stats.get("winRate")+ game.getScore().get(1)>game.getScore().get(0)?1.:0.);
             }
         });
         stats.forEach((s, aDouble) -> stats.replace(s,aDouble/games.size()));

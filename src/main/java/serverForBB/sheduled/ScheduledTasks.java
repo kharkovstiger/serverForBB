@@ -23,8 +23,8 @@ public class ScheduledTasks {
         this.gameService = gameService;
     }
 
-    @Scheduled(cron = "0 0 4 ? * 2")
-//    @Scheduled(cron = "0 48 6 ? * *")
+//    @Scheduled(cron = "0 0 4 ? * 3")
+    @Scheduled(cron = "0 46 7 ? * *")
     public void addGames(){
         int season=gameService.getSeason(LocalDate.now());
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));

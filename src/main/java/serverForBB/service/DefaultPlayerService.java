@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import serverForBB.model.Game;
 import serverForBB.model.Player;
+import serverForBB.model.Stats;
 import serverForBB.model.Team;
 import serverForBB.repository.PlayerRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DefaultPlayerService implements PlayerService{
@@ -73,17 +76,25 @@ public class DefaultPlayerService implements PlayerService{
     @Override
     public List<Player> getPlayersStatForGameList(List<Game> games, String country) {
         List<Player> players=new ArrayList<>();
+        Map<String, Double> summaryStats=new HashMap<>();
+        summaryStats.put("doubleDouble", 0.);
+        summaryStats.put("tripleDouble", 0.);
+        summaryStats.put("quadroDouble", 0.);
+        summaryStats.put("pentaDouble", 0.);
+        summaryStats.put("twenty", 0.);
+        Map<String, Double> records=new HashMap<>();
+        Stats.initialize(records, Player.class.getName());
         games.forEach(game -> {
             if (game.getAwayTeam().getName().equals(country)) {
-                addStat(game.getAwayTeam(), players);
+                addStat(game.getAwayTeam(), players, summaryStats, records);
             } else {
-                addStat(game.getHomeTeam(), players);
+                addStat(game.getHomeTeam(), players, summaryStats, records);
             }
         });
         return players;
     }
 
-    private void addStat(Team team, List<Player> players) {
+    private void addStat(Team team, List<Player> players, Map<String, Double> map, Map<String, Double> records) {
         team.getPlayers().forEach(player -> {
             Player existPlayer=players.stream().filter(player1 -> player1.equals(player)).findFirst().orElse(null);
             if (existPlayer != null) {
@@ -92,6 +103,10 @@ public class DefaultPlayerService implements PlayerService{
             }
             else 
                 players.add(player);
+            player.getStats().forEach((s, aDouble) -> {
+                if (aDouble>records.get(s))
+                    records.replace(s,aDouble);
+            });
         });
     }
 }

@@ -100,7 +100,7 @@ public class DefaultGameService implements GameService {
             String s=((DeferredElementImpl) nodeList.item(i)).getElementsByTagName("finish").item(0)
                     .getTextContent().split("T")[0];
             LocalDate date=LocalDate.parse(s, FORMATTER);
-            if (localDate.isBefore(date)){
+            if (!localDate.isAfter(date)){
                 return Integer.parseInt(((DeferredElementImpl) nodeList.item(i)).getAttribute("id"));
             }
         }

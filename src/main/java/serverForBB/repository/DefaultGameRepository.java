@@ -51,14 +51,14 @@ public class DefaultGameRepository implements GameRepository {
 
     @Override
     public Game getMaxId(int season) {
-        List<Game> games=gameCrudRepository.getAllGamesForSeason(season);
-        if (games==null || games.size()==0){
-            games=gameCrudRepository.getAllGamesForSeason(season-1);
+//        List<Game> games=gameCrudRepository.getAllGamesForSeason(season);
+//        if (games==null || games.size()==0){
+        List<Game> games=gameCrudRepository.getAllGamesForSeason(season-1);
             games.sort(Comparator.comparing(o -> Integer.valueOf(o.getId())));
             return games.get(games.size()-1);
-        }
-        games.sort(Comparator.comparing(o -> Integer.valueOf(o.getId())));
-        return games.get(0);
+//        }
+//        games.sort(Comparator.comparing(o -> Integer.valueOf(o.getId())));
+//        return games.get(0);
     }
 
     @Override

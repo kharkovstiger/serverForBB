@@ -29,17 +29,13 @@ public class ScheduledTasks {
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
         Integer id=maxId;
         System.err.println("Begin to add new games");
-//        Integer maxId=20733;
-        boolean flag=true;
-        while (flag){
+        while (id-maxId<1500){
             try {
                 gameService.addGame(++id);
                 System.err.println("Added game with ID: "+id);
             }
             catch (ArrayIndexOutOfBoundsException e){
                 System.err.println(Arrays.toString(e.getStackTrace()));
-                if (id-maxId>1500)
-                    flag=false;
             }
         }
     }

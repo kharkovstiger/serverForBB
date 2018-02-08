@@ -24,7 +24,6 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 4 ? * 3")
-//    @Scheduled(cron = "0 53 7 ? * *")
     public void addGames(){
         int season=gameService.getSeason(LocalDate.now());
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));

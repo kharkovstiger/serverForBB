@@ -11,6 +11,7 @@ import serverForBB.model.StatRequest;
 import serverForBB.service.BBAPIService;
 import serverForBB.service.BBService;
 import serverForBB.service.GameService;
+import serverForBB.sheduled.ScheduledTasks;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
@@ -27,12 +28,14 @@ public class GameController {
     private final GameService gameService;
     private final BBAPIService bbapiService;
     private final BBService bbService;
+    private final ScheduledTasks tasks;
 
     @Autowired
-    public GameController(GameService gameService, BBAPIService bbapiService, BBService bbService) {
+    public GameController(GameService gameService, BBAPIService bbapiService, BBService bbService, ScheduledTasks tasks) {
         this.gameService = gameService;
         this.bbapiService = bbapiService;
         this.bbService = bbService;
+        this.tasks = tasks;
     }
     
     @GetMapping(value = "/addGame")
@@ -76,5 +79,11 @@ public class GameController {
     public Results getResultsForCountryAgainstCountry(@RequestBody List<String> countries){
         List<Game> games=gameService.getAllGamesForCountryAgainstCountry(countries.get(0), countries.get(1), false);
         return gameService.getResultsFromGameList(games, countries.get(0));
+    }
+    
+    @GetMapping(value = "/updateGames")
+    public ResponseEntity updateGames(){
+        tasks.addGames();
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

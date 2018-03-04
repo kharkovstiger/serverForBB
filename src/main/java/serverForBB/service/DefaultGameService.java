@@ -153,7 +153,10 @@ public class DefaultGameService implements GameService {
 
     private int isDD(Map<String, Double> stats) {
         final int[] c = {0};
-        stats.forEach((s, aDouble) -> c[0] +=(aDouble >= 10 ? 1 : 0));
+        stats.forEach((s, aDouble) -> {
+            if (s.equals("points") || s.equals("rebounds") || s.equals("assists") || s.equals("steals") || s.equals("blocks"))
+                c[0] +=(aDouble >= 10 ? 1 : 0);
+        });
         return c[0];
     }
 

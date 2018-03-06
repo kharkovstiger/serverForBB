@@ -76,6 +76,7 @@ public class DefaultPlayerService implements PlayerService{
         doubles.put("quadroDouble", new ArrayList<>());
         doubles.put("pentaDouble", new ArrayList<>());
         doubles.put("twenty", new ArrayList<>());
+        doubles.put("fifth", new ArrayList<>());
         Map<String, List<Record>> records=new HashMap<>();
 //        Stats.initialize(records, Player.class.getName());
         games.forEach(game -> {
@@ -137,15 +138,21 @@ public class DefaultPlayerService implements PlayerService{
                 doubleList.add(new Record(0., player, game));
                 doubles.replace("twenty", doubleList);
             }
+            if (c[2]>=4){
+                doubleList=doubles.get("fifth");
+                doubleList.add(new Record(0., player, game));
+                doubles.replace("fifth", doubleList);
+            }
         });
     }
 
     private int[] isDoubles(Map<String, Double> stats) {
-        final int[] c = {0, 0};
+        final int[] c = {0, 0, 0};
         stats.forEach((s, aDouble) -> {
             if (s.equals("points") || s.equals("rebounds") || s.equals("assists") || s.equals("steals") || s.equals("blocks")) {
                 c[0] += (aDouble >= 10 ? 1 : 0);
                 c[1] += (aDouble >= 20 ? 1 : 0);
+                c[2] += (aDouble >= 5 ? 1 : 0);
             }
         });
         return c;

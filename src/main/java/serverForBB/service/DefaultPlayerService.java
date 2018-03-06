@@ -101,37 +101,37 @@ public class DefaultPlayerService implements PlayerService{
             else 
                 players.add(player);
             player.getStats().forEach((s, aDouble) -> {
-                if (records.get(s)==null || aDouble>records.get(s).getNumbers())
-                    records.replace(s, new Record(aDouble, player, game));
+                if ((records.get(s)==null || aDouble>records.get(s).getNumbers()) && !s.equals("doubleDouble") && !s.equals("games"))
+                    records.put(s, new Record(aDouble, player, game));
             });
             int[] c=isDoubles(player.getStats());
-            List<Record> record;
+            List<Record> doubleList;
             switch (c[0]){
                 case 2:
-                    record=doubles.get("doubleDouble");
-                    record.add(new Record(0., player, game));
-                    doubles.replace("doubleDouble", record);
+                    doubleList=doubles.get("doubleDouble");
+                    doubleList.add(new Record(0., player, game));
+                    doubles.replace("doubleDouble", doubleList);
                     break;
                 case 3:
-                    record=doubles.get("tripleDouble");
-                    record.add(new Record(0., player, game));
-                    doubles.replace("tripleDouble", record);
+                    doubleList=doubles.get("tripleDouble");
+                    doubleList.add(new Record(0., player, game));
+                    doubles.replace("tripleDouble", doubleList);
                     break;
                 case 4:
-                    record=doubles.get("quadroDouble");
-                    record.add(new Record(0., player, game));
-                    doubles.replace("quadroDouble", record);
+                    doubleList=doubles.get("quadroDouble");
+                    doubleList.add(new Record(0., player, game));
+                    doubles.replace("quadroDouble", doubleList);
                     break;
                 case 5:
-                    record=doubles.get("pentaDouble");
-                    record.add(new Record(0., player, game));
-                    doubles.replace("pentaDouble", record);
+                    doubleList=doubles.get("pentaDouble");
+                    doubleList.add(new Record(0., player, game));
+                    doubles.replace("pentaDouble", doubleList);
                     break;
             }
             if (c[1]>=2){
-                record=doubles.get("twenty");
-                record.add(new Record(0., player, game));
-                doubles.replace("twenty", record);
+                doubleList=doubles.get("twenty");
+                doubleList.add(new Record(0., player, game));
+                doubles.replace("twenty", doubleList);
             }
         });
     }

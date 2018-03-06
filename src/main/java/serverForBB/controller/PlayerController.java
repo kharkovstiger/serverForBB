@@ -54,16 +54,16 @@ public class PlayerController {
     }
 
     @PostMapping(value = "/getPlayersStatForGameListPerGame")
-    public PlayerResponse getPlayersStatForGameListPerGame(@RequestBody StatRequest request){
+    public List<Player> getPlayersStatForGameListPerGame(@RequestBody StatRequest request){
         PlayerResponse playerResponse=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
         playerResponse.setPlayers(playerService.getAverages(playerResponse.getPlayers(), "game"));
-        return playerResponse;
+        return playerResponse.getPlayers();
     }
 
     @PostMapping(value = "/getPlayersStatForGameListPerMinutes")
-    public PlayerResponse getPlayersStatForGameListPerMinutes(@RequestBody StatRequest request){
+    public List<Player> getPlayersStatForGameListPerMinutes(@RequestBody StatRequest request){
         PlayerResponse playerResponse=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
         playerResponse.setPlayers(playerService.getAverages(playerResponse.getPlayers(), "minutes"));
-        return playerResponse;
+        return playerResponse.getPlayers();
     }
 }

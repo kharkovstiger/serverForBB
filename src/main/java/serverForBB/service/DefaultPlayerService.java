@@ -101,7 +101,7 @@ public class DefaultPlayerService implements PlayerService{
                 if (!s.equals("doubleDouble") && !s.equals("games")) {
                     if ((records.get(s) == null || aDouble > records.get(s).get(0).getNumbers()))
                         records.put(s, Arrays.asList(new Record(aDouble, player, game)));
-                    if (aDouble.equals(records.get(s).get(0).getNumbers())){
+                    else if (aDouble.equals(records.get(s).get(0).getNumbers())){
                         List<Record> list=records.get(s);
                         list.add(new Record(aDouble, player, game));
                         records.put(s, list);

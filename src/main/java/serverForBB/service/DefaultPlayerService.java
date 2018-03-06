@@ -98,7 +98,7 @@ public class DefaultPlayerService implements PlayerService{
             else 
                 players.add(player);
             player.getStats().forEach((s, aDouble) -> {
-                if (!s.equals("doubleDouble") && !s.equals("games")) {
+                if (!s.equals("doubleDouble") && !s.equals("games") && !s.equals("fouls") && !s.equals("turnovers") && !s.equals("minutes")) {
                     if ((records.get(s) == null || aDouble > records.get(s).get(0).getNumbers()))
                         records.put(s, new ArrayList<>(Collections.singletonList(new Record(aDouble, player, game))));
                     else if (aDouble.equals(records.get(s).get(0).getNumbers())){

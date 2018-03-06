@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import serverForBB.model.*;
 import serverForBB.repository.PlayerRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DefaultPlayerService implements PlayerService{
@@ -79,7 +76,7 @@ public class DefaultPlayerService implements PlayerService{
         doubles.put("quadroDouble", new ArrayList<>());
         doubles.put("pentaDouble", new ArrayList<>());
         doubles.put("twenty", new ArrayList<>());
-        Map<String, Record> records=new HashMap<>();
+        Map<String, List<Record>> records=new HashMap<>();
 //        Stats.initialize(records, Player.class.getName());
         games.forEach(game -> {
             if (game.getAwayTeam().getName().equals(country)) {
@@ -91,7 +88,7 @@ public class DefaultPlayerService implements PlayerService{
         return new PlayerResponse(players, doubles, records);
     }
 
-    private void addStat(Game game, Team team, List<Player> players, Map<String, List<Record>> doubles, Map<String, Record> records) {
+    private void addStat(Game game, Team team, List<Player> players, Map<String, List<Record>> doubles, Map<String, List<Record>> records) {
         team.getPlayers().forEach(player -> {
             Player existPlayer=players.stream().filter(player1 -> player1.equals(player)).findFirst().orElse(null);
             if (existPlayer != null) {
@@ -101,8 +98,15 @@ public class DefaultPlayerService implements PlayerService{
             else 
                 players.add(player);
             player.getStats().forEach((s, aDouble) -> {
-                if ((records.get(s)==null || aDouble>records.get(s).getNumbers()) && !s.equals("doubleDouble") && !s.equals("games"))
-                    records.put(s, new Record(aDouble, player, game));
+                if (!s.equals("doubleDouble") && !s.equals("games")) {
+                    if ((records.get(s) == null || aDouble > records.get(s).get(0).getNumbers()))
+                        records.put(s, Arrays.asList(new Record(aDouble, player, game)));
+                    if (aDouble.equals(records.get(s).get(0).getNumbers())){
+                        List<Record> list=records.get(s);
+                        list.add(new Record(aDouble, player, game));
+                        records.put(s, list);
+                    }
+                }
             });
             int[] c=isDoubles(player.getStats());
             List<Record> doubleList;

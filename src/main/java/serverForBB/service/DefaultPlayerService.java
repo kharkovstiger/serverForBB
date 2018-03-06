@@ -2,10 +2,7 @@ package serverForBB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import serverForBB.model.Game;
-import serverForBB.model.Player;
-import serverForBB.model.Stats;
-import serverForBB.model.Team;
+import serverForBB.model.*;
 import serverForBB.repository.PlayerRepository;
 
 import java.util.ArrayList;
@@ -74,27 +71,27 @@ public class DefaultPlayerService implements PlayerService{
     }
 
     @Override
-    public List<Player> getPlayersStatForGameList(List<Game> games, String country) {
+    public PlayerResponse getPlayersStatForGameList(List<Game> games, String country) {
         List<Player> players=new ArrayList<>();
-        Map<String, Double> summaryStats=new HashMap<>();
-        summaryStats.put("doubleDouble", 0.);
-        summaryStats.put("tripleDouble", 0.);
-        summaryStats.put("quadroDouble", 0.);
-        summaryStats.put("pentaDouble", 0.);
-        summaryStats.put("twenty", 0.);
-        Map<String, Double> records=new HashMap<>();
-        Stats.initialize(records, Player.class.getName());
+        Map<String, List<Record>> doubles=new HashMap<>();
+        doubles.put("doubleDouble", new ArrayList<>());
+        doubles.put("tripleDouble", new ArrayList<>());
+        doubles.put("quadroDouble", new ArrayList<>());
+        doubles.put("pentaDouble", new ArrayList<>());
+        doubles.put("twenty", new ArrayList<>());
+        Map<String, Record> records=new HashMap<>();
+//        Stats.initialize(records, Player.class.getName());
         games.forEach(game -> {
             if (game.getAwayTeam().getName().equals(country)) {
-                addStat(game.getAwayTeam(), players, summaryStats, records);
+                addStat(game, game.getAwayTeam(), players, doubles, records);
             } else {
-                addStat(game.getHomeTeam(), players, summaryStats, records);
+                addStat(game, game.getHomeTeam(), players, doubles, records);
             }
         });
-        return players;
+        return new PlayerResponse(players, doubles, records);
     }
 
-    private void addStat(Team team, List<Player> players, Map<String, Double> map, Map<String, Double> records) {
+    private void addStat(Game game, Team team, List<Player> players, Map<String, List<Record>> doubles, Map<String, Record> records) {
         team.getPlayers().forEach(player -> {
             Player existPlayer=players.stream().filter(player1 -> player1.equals(player)).findFirst().orElse(null);
             if (existPlayer != null) {
@@ -104,9 +101,49 @@ public class DefaultPlayerService implements PlayerService{
             else 
                 players.add(player);
             player.getStats().forEach((s, aDouble) -> {
-                if (aDouble>records.get(s))
-                    records.replace(s,aDouble);
+                if (records.get(s)==null || aDouble>records.get(s).getNumbers())
+                    records.replace(s, new Record(aDouble, player, game));
             });
+            int[] c=isDoubles(player.getStats());
+            List<Record> record;
+            switch (c[0]){
+                case 2:
+                    record=doubles.get("doubleDouble");
+                    record.add(new Record(0., player, game));
+                    doubles.replace("doubleDouble", record);
+                    break;
+                case 3:
+                    record=doubles.get("tripleDouble");
+                    record.add(new Record(0., player, game));
+                    doubles.replace("tripleDouble", record);
+                    break;
+                case 4:
+                    record=doubles.get("quadroDouble");
+                    record.add(new Record(0., player, game));
+                    doubles.replace("quadroDouble", record);
+                    break;
+                case 5:
+                    record=doubles.get("pentaDouble");
+                    record.add(new Record(0., player, game));
+                    doubles.replace("pentaDouble", record);
+                    break;
+            }
+            if (c[1]>=2){
+                record=doubles.get("twenty");
+                record.add(new Record(0., player, game));
+                doubles.replace("twenty", record);
+            }
         });
+    }
+
+    private int[] isDoubles(Map<String, Double> stats) {
+        final int[] c = {0, 0};
+        stats.forEach((s, aDouble) -> {
+            if (s.equals("points") || s.equals("rebounds") || s.equals("assists") || s.equals("steals") || s.equals("blocks")) {
+                c[0] += (aDouble >= 10 ? 1 : 0);
+                c[1] += (aDouble >= 20 ? 1 : 0);
+            }
+        });
+        return c;
     }
 }

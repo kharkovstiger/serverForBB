@@ -3,8 +3,8 @@ package serverForBB.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import serverForBB.model.Game;
 import serverForBB.model.Player;
+import serverForBB.model.PlayerResponse;
 import serverForBB.model.StatRequest;
 import serverForBB.service.PlayerService;
 
@@ -49,19 +49,21 @@ public class PlayerController {
     }
     
     @PostMapping(value = "/getPlayersStatForGameList")
-    public List<Player> getPlayersStatForGameList(@RequestBody StatRequest request){
+    public PlayerResponse getPlayersStatForGameList(@RequestBody StatRequest request){
         return playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
     }
 
     @PostMapping(value = "/getPlayersStatForGameListPerGame")
-    public List<Player> getPlayersStatForGameListPerGame(@RequestBody StatRequest request){
-        List<Player> players=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
-        return playerService.getAverages(players, "game");
+    public PlayerResponse getPlayersStatForGameListPerGame(@RequestBody StatRequest request){
+        PlayerResponse playerResponse=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
+        playerResponse.setPlayers(playerService.getAverages(playerResponse.getPlayers(), "game"));
+        return playerResponse;
     }
 
     @PostMapping(value = "/getPlayersStatForGameListPerMinutes")
-    public List<Player> getPlayersStatForGameListPerMinutes(@RequestBody StatRequest request){
-        List<Player> players=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
-        return playerService.getAverages(players, "minutes");
+    public PlayerResponse getPlayersStatForGameListPerMinutes(@RequestBody StatRequest request){
+        PlayerResponse playerResponse=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
+        playerResponse.setPlayers(playerService.getAverages(playerResponse.getPlayers(), "minutes"));
+        return playerResponse;
     }
 }

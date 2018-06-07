@@ -83,6 +83,7 @@ public class GameController {
     
     @GetMapping(value = "/updateGames")
     public ResponseEntity updateGames(@PathParam("id") Integer id){
-        return tasks.addGames(id)?new ResponseEntity(HttpStatus.OK):new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
+        boolean result=id==null?tasks.addGames():tasks.addGamesFromId(id);
+        return result?new ResponseEntity(HttpStatus.OK):new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
     }
 }

@@ -24,14 +24,18 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 4 ? * 3")
-    public boolean addGames(Integer beginId){
-//        Game lastInsertedGame=gameService.getLastInsertedGame();
-//        if (LocalDate.now().minusDays(7).isBefore(lastInsertedGame.getDate()))
-//            return true;
+    public boolean addGames(){
+        Game lastInsertedGame=gameService.getLastInsertedGame();
+        if (LocalDate.now().minusDays(7).isBefore(lastInsertedGame.getDate()))
+            return true;
         int season=gameService.getSeason(LocalDate.now());
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
-        Integer id=beginId==null?maxId:beginId;
         System.err.println("Begin to add new games");
+        addingGames(maxId, maxId);
+        return true;
+    }
+
+    private void addingGames(Integer maxId, Integer id) {
         while (id-maxId<1500){
             try {
                 gameService.addGame(++id);
@@ -41,6 +45,13 @@ public class ScheduledTasks {
                 System.err.println(Arrays.toString(e.getStackTrace()));
             }
         }
+    }
+
+    public boolean addGamesFromId(Integer id){
+        int season=gameService.getSeason(LocalDate.now());
+        final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
+        System.err.println("Begin to add new games");
+        addingGames(maxId, id);
         return true;
     }
 }

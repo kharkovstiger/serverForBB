@@ -65,4 +65,9 @@ public class DefaultGameRepository implements GameRepository {
     public List<Game> getAllGamesForSeason(int season) {
         return gameCrudRepository.getAllGamesForSeason(season);
     }
+    
+    @Override
+    public Game getLastInsertedGame(){
+        return gameCrudRepository.findLastInsertedGame();
+    }
 }

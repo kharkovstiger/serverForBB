@@ -82,7 +82,7 @@ public class GameController {
     }
     
     @GetMapping(value = "/updateGames")
-    public void updateGames(){
-        tasks.addGames();
+    public ResponseEntity updateGames(){
+        return tasks.addGames()?new ResponseEntity(HttpStatus.OK):new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
     }
 }

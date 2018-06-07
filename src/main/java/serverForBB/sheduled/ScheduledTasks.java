@@ -24,7 +24,10 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 4 ? * 3")
-    public void addGames(){
+    public boolean addGames(){
+//        Game lastInsertedGame=gameService.getLastInsertedGame();
+//        if (LocalDate.now().minusDays(7).isBefore(lastInsertedGame.getDate()))
+//            return true;
         int season=gameService.getSeason(LocalDate.now());
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
         Integer id=maxId;
@@ -38,5 +41,6 @@ public class ScheduledTasks {
                 System.err.println(Arrays.toString(e.getStackTrace()));
             }
         }
+        return true;
     }
 }

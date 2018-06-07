@@ -47,4 +47,7 @@ public interface GameCrudRepository extends MongoRepository<Game, String> {
 
     @Query(value = "{'season':?0}")
     List<Game> getAllGamesForSeason(int season);
+
+    @Query(value = "{}, { sort: { _id: -1 }, limit: 1 }")
+    Game findLastInsertedGame();
 }

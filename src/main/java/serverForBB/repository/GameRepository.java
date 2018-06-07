@@ -20,4 +20,6 @@ public interface GameRepository {
     Game getMaxId(int season);
 
     List<Game> getAllGamesForSeason(int season);
+
+    Game getLastInsertedGame();
 }

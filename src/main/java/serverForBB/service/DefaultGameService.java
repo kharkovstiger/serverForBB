@@ -328,6 +328,11 @@ public class DefaultGameService implements GameService {
         return results;
     }
 
+    @Override
+    public Game getLastInsertedGame() {
+        return gameRepository.getLastInsertedGame();
+    }
+
     private void addResult(Results results, int pos, String type){
         results.add(results.getAll(), pos);
         switch (type){

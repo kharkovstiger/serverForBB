@@ -33,4 +33,6 @@ public interface GameService {
     List<Game> getAllGamesForSeason(int season);
 
     Results getResultsFromGameList(List<Game> games, String s);
+
+    Game getLastInsertedGame();
 }

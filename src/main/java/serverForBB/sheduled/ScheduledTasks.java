@@ -24,13 +24,13 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 4 ? * 3")
-    public boolean addGames(){
+    public boolean addGames(Integer beginId){
 //        Game lastInsertedGame=gameService.getLastInsertedGame();
 //        if (LocalDate.now().minusDays(7).isBefore(lastInsertedGame.getDate()))
 //            return true;
         int season=gameService.getSeason(LocalDate.now());
         final Integer maxId= Integer.valueOf(gameService.getMaxId(season));
-        Integer id=maxId;
+        Integer id=beginId==null?maxId:beginId;
         System.err.println("Begin to add new games");
         while (id-maxId<1500){
             try {

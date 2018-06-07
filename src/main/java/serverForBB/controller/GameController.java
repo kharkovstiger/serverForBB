@@ -6,6 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Game;
+import serverForBB.model.utils.DefensiveTactic;
+import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.Results;
 import serverForBB.model.utils.StatRequest;
 import serverForBB.service.BBAPIService;
@@ -85,5 +87,15 @@ public class GameController {
     public ResponseEntity updateGames(@PathParam("id") Integer id){
         boolean result=id==null?tasks.addGames():tasks.addGamesFromId(id);
         return result?new ResponseEntity(HttpStatus.OK):new ResponseEntity(HttpStatus.EXPECTATION_FAILED);
+    }
+    
+    @PostMapping(value = "/offTactics")
+    public Map<OffensiveTactic, Map<String, Double>> getStatsForOffensiveTacticsForGameList(@RequestBody StatRequest request){
+        return gameService.getStatsForOffensiveTacticsForGameList(request.getGames(), request.getCountry());
+    }
+
+    @PostMapping(value = "/defTactics")
+    public Map<DefensiveTactic, Map<String, Double>> getStatsForDefensiveTacticsForGameList(@RequestBody StatRequest request){
+        return gameService.getStatsForDefensiveTacticsForGameList(request.getGames(), request.getCountry());
     }
 }

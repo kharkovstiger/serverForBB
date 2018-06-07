@@ -1,6 +1,8 @@
 package serverForBB.service;
 
 import serverForBB.model.Game;
+import serverForBB.model.utils.DefensiveTactic;
+import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.Results;
 
 import java.time.LocalDate;
@@ -35,4 +37,8 @@ public interface GameService {
     Results getResultsFromGameList(List<Game> games, String s);
 
     Game getLastInsertedGame();
+
+    Map<OffensiveTactic,Map<String,Double>> getStatsForOffensiveTacticsForGameList(List<Game> games, String country);
+
+    Map<DefensiveTactic, Map<String, Double>> getStatsForDefensiveTacticsForGameList(List<Game> games, String country);
 }

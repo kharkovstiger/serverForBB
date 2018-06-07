@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultGameService implements GameService {
@@ -331,6 +332,36 @@ public class DefaultGameService implements GameService {
     @Override
     public Game getLastInsertedGame() {
         return gameRepository.getLastInsertedGame();
+    }
+
+    @Override
+    public Map<OffensiveTactic, Map<String, Double>> getStatsForOffensiveTacticsForGameList(List<Game> games, String country) {
+        Map<OffensiveTactic, Map<String, Double>> result=new HashMap<>();
+        for (int i = 0; i <OffensiveTactic.values().length ; i++) {
+            int finalI = i;
+            Map<String, Double> stat=getAveragedStatistics(games.stream().filter(g -> 
+                    g.getAwayTeam().getPlayers().get(0).getCountry().equals(country)? 
+                            g.getAwayTeam().getOffensiveTactic().equals(OffensiveTactic.values()[finalI]): 
+                            g.getHomeTeam().getOffensiveTactic().equals(OffensiveTactic.values()[finalI])
+            ).collect(Collectors.toList()), country);
+            result.put(OffensiveTactic.values()[finalI], stat);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<DefensiveTactic, Map<String, Double>> getStatsForDefensiveTacticsForGameList(List<Game> games, String country) {
+        Map<DefensiveTactic, Map<String, Double>> result=new HashMap<>();
+        for (int i = 0; i <DefensiveTactic.values().length ; i++) {
+            int finalI = i;
+            Map<String, Double> stat=getAveragedStatistics(games.stream().filter(g ->
+                    g.getAwayTeam().getPlayers().get(0).getCountry().equals(country)?
+                            g.getAwayTeam().getDefensiveTactic().equals(DefensiveTactic.values()[finalI]):
+                            g.getHomeTeam().getDefensiveTactic().equals(DefensiveTactic.values()[finalI])
+            ).collect(Collectors.toList()), country);
+            result.put(DefensiveTactic.values()[finalI], stat);
+        }
+        return result;
     }
 
     private void addResult(Results results, int pos, String type){

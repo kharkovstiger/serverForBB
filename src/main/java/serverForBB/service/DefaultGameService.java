@@ -339,8 +339,8 @@ public class DefaultGameService implements GameService {
         Map<OffensiveTactic, Map<String, Double>> result=new HashMap<>();
         for (int i = 0; i <OffensiveTactic.values().length ; i++) {
             int finalI = i;
-            Map<String, Double> stat=getAveragedStatistics(games.stream().filter(g -> 
-                    g.getAwayTeam().getPlayers().get(0).getCountry().equals(country)? 
+            Map<String, Double> stat=getAveragedStatistics(games.stream().filter(g ->
+                    country.equals(g.getAwayTeam().getPlayers().get(0).getCountry())? 
                             g.getAwayTeam().getOffensiveTactic().equals(OffensiveTactic.values()[finalI]): 
                             g.getHomeTeam().getOffensiveTactic().equals(OffensiveTactic.values()[finalI])
             ).collect(Collectors.toList()), country);
@@ -355,7 +355,7 @@ public class DefaultGameService implements GameService {
         for (int i = 0; i <DefensiveTactic.values().length ; i++) {
             int finalI = i;
             Map<String, Double> stat=getAveragedStatistics(games.stream().filter(g ->
-                    g.getAwayTeam().getPlayers().get(0).getCountry().equals(country)?
+                    country.equals(g.getAwayTeam().getPlayers().get(0).getCountry())?
                             g.getAwayTeam().getDefensiveTactic().equals(DefensiveTactic.values()[finalI]):
                             g.getHomeTeam().getDefensiveTactic().equals(DefensiveTactic.values()[finalI])
             ).collect(Collectors.toList()), country);

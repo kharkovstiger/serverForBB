@@ -1,4 +1,4 @@
-package serverForBB.model;
+package serverForBB.model.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

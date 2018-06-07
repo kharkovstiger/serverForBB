@@ -3,6 +3,8 @@ package serverForBB.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import serverForBB.model.*;
+import serverForBB.model.utils.PlayerResponse;
+import serverForBB.model.utils.Record;
 import serverForBB.repository.PlayerRepository;
 
 import java.util.*;

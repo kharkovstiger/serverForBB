@@ -1,6 +1,7 @@
-package serverForBB.model;
+package serverForBB.model.utils;
 
 import lombok.Data;
+import serverForBB.model.Player;
 
 import java.util.List;
 import java.util.Map;

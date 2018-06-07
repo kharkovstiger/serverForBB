@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Player;
-import serverForBB.model.PlayerResponse;
-import serverForBB.model.StatRequest;
+import serverForBB.model.utils.PlayerResponse;
+import serverForBB.model.utils.StatRequest;
 import serverForBB.service.PlayerService;
 
 import javax.websocket.server.PathParam;

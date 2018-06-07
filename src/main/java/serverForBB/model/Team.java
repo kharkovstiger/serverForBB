@@ -1,8 +1,9 @@
 package serverForBB.model;
 
 import lombok.Data;
+import serverForBB.model.utils.DefensiveTactic;
+import serverForBB.model.utils.OffensiveTactic;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,8 @@ public class Team {
     private String name;
     private List<Player> players;
     private Map<String, Double> stats;
+    private OffensiveTactic offensiveTactic;
+    private DefensiveTactic defensiveTactic;
 
     public Team() {
 

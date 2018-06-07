@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import serverForBB.model.utils.Stats;
 
 import java.util.HashMap;
 import java.util.Map;

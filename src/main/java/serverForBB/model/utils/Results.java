@@ -1,4 +1,4 @@
-package serverForBB.model;
+package serverForBB.model.utils;
 
 import lombok.Data;
 

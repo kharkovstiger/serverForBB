@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import serverForBB.model.*;
+import serverForBB.model.utils.*;
 import serverForBB.repository.GameRepository;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -88,7 +89,32 @@ public class DefaultGameService implements GameService {
         }
         game.setType(type.trim());
         game.setScore(score);
+        
+        setTactics(homeTeam, awayTeam, response);
         return game;
+    }
+
+    private void setTactics(Team homeTeam, Team awayTeam, String response) {
+        String[] temp=response.split("<tr|tr>");
+        Document doc;
+        for (int i = 0; i < temp.length; i++) {
+            if (("<?xml version=\"1.0\" encoding=\"utf-8\"?><tr" + temp[i] + "tr>").contains("Offensive Strategy")){
+                doc=getDocument("<?xml version=\"1.0\" encoding=\"utf-8\"?><tr" + temp[i] + "tr>");
+                NodeList nodeList=doc.getElementsByTagName("tr");
+                String tactic=((DeferredElementImpl) nodeList.item(0)).getElementsByTagName("td").item(0).getTextContent().trim();
+                awayTeam.setOffensiveTactic(OffensiveTactic.fromString(tactic));
+                tactic=((DeferredElementImpl) nodeList.item(0)).getElementsByTagName("td").item(2).getTextContent().trim();
+                homeTeam.setOffensiveTactic(OffensiveTactic.fromString(tactic));
+            }
+            else if (("<?xml version=\"1.0\" encoding=\"utf-8\"?><tr" + temp[i] + "tr>").contains("Defensive Strategy")){
+                doc=getDocument("<?xml version=\"1.0\" encoding=\"utf-8\"?><tr" + temp[i] + "tr>");
+                NodeList nodeList=doc.getElementsByTagName("tr");
+                String tactic=((DeferredElementImpl) nodeList.item(0)).getElementsByTagName("td").item(0).getTextContent().trim();
+                awayTeam.setDefensiveTactic(DefensiveTactic.fromString(tactic));
+                tactic=((DeferredElementImpl) nodeList.item(0)).getElementsByTagName("td").item(2).getTextContent().trim();
+                homeTeam.setDefensiveTactic(DefensiveTactic.fromString(tactic));
+            }
+        }
     }
 
     @Override

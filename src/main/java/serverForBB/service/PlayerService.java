@@ -2,7 +2,7 @@ package serverForBB.service;
 
 import serverForBB.model.Game;
 import serverForBB.model.Player;
-import serverForBB.model.PlayerResponse;
+import serverForBB.model.utils.PlayerResponse;
 
 import java.util.List;
 

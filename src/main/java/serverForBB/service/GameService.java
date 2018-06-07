@@ -1,7 +1,7 @@
 package serverForBB.service;
 
 import serverForBB.model.Game;
-import serverForBB.model.Results;
+import serverForBB.model.utils.Results;
 
 import java.time.LocalDate;
 import java.util.List;

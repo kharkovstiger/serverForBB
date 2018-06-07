@@ -1,6 +1,8 @@
-package serverForBB.model;
+package serverForBB.model.utils;
 
 import lombok.Data;
+import serverForBB.model.Game;
+import serverForBB.model.Player;
 
 @Data
 public class Record {

@@ -2,12 +2,15 @@ package serverForBB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import serverForBB.model.*;
+import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.PlayerResponse;
 import serverForBB.model.utils.Record;
 import serverForBB.repository.PlayerRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultPlayerService implements PlayerService{
@@ -49,6 +52,24 @@ public class DefaultPlayerService implements PlayerService{
             });
         });
         return players;
+    }
+
+    @Override
+    public Map<OffensiveTactic, Map<String, Double>> getPlayerStatsForOffensiveTactics(List<Game> games, String country, String playerId) {
+        Map<OffensiveTactic, Map<String, Double>> result=new HashMap<>();
+        for (OffensiveTactic offensiveTactic : OffensiveTactic.values()) {
+            List<Game> gamesForTactic=games.stream().filter(g -> getTeam(g, country).getOffensiveTactic().equals(offensiveTactic))
+                    .collect(Collectors.toList());
+            PlayerResponse response=getPlayersStatForGameList(gamesForTactic, country);
+            List<Player> players=getAverages(response.getPlayers(), "games");
+            players.stream().filter(p -> p.getId().equals(playerId)).findFirst()
+                    .ifPresent(player -> result.put(offensiveTactic, player.getStats()));
+        }
+        return result;
+    }
+
+    private Team getTeam(Game g, String country) {
+        return g.getAwayTeam().getName().equals(country)?g.getAwayTeam():g.getHomeTeam();
     }
 
     @Override

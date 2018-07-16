@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Player;
+import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.PlayerResponse;
 import serverForBB.model.utils.StatRequest;
 import serverForBB.service.PlayerService;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = PlayerController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,5 +67,10 @@ public class PlayerController {
         PlayerResponse playerResponse=playerService.getPlayersStatForGameList(request.getGames(), request.getCountry());
         playerResponse.setPlayers(playerService.getAverages(playerResponse.getPlayers(), "minutes"));
         return playerResponse.getPlayers();
+    }
+
+    @PostMapping(value = "/offTactics/{playerId}")
+    public Map<OffensiveTactic, Map<String, Double>> getStatsForOffensiveTacticsForGameList(@RequestBody StatRequest request, @PathVariable String playerId){
+        return playerService.getPlayerStatsForOffensiveTactics(request.getGames(), request.getCountry(), playerId);
     }
 }

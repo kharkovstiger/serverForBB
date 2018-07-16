@@ -2,9 +2,11 @@ package serverForBB.service;
 
 import serverForBB.model.Game;
 import serverForBB.model.Player;
+import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.PlayerResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PlayerService {
     
@@ -23,4 +25,6 @@ public interface PlayerService {
     PlayerResponse getPlayersStatForGameList(List<Game> games, String country);
 
     List<Player> getAverages(List<Player> players, String game);
+
+    Map<OffensiveTactic,Map<String,Double>> getPlayerStatsForOffensiveTactics(List<Game> games, String country, String playerId);
 }

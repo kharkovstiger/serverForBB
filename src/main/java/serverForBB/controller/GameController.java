@@ -16,6 +16,7 @@ import serverForBB.service.GameService;
 import serverForBB.sheduled.ScheduledTasks;
 
 import javax.websocket.server.PathParam;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -97,5 +98,11 @@ public class GameController {
     @PostMapping(value = "/defTactics")
     public Map<DefensiveTactic, Map<String, Double>> getStatsForDefensiveTacticsForGameList(@RequestBody StatRequest request){
         return gameService.getStatsForDefensiveTacticsForGameList(request.getGames(), request.getCountry());
+    }
+    
+    @GetMapping(value = "/isGamesUpdated")
+    public boolean isGamesUpdated(){
+        Game lastInsertedGame=gameService.getLastInsertedGame();
+        return LocalDate.now().minusDays(7).isBefore(lastInsertedGame.getDate());
     }
 }

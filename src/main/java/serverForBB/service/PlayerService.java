@@ -4,6 +4,7 @@ import serverForBB.model.Game;
 import serverForBB.model.Player;
 import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.PlayerResponse;
+import serverForBB.model.utils.Position;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +28,10 @@ public interface PlayerService {
     List<Player> getAverages(List<Player> players, String game);
 
     Map<OffensiveTactic,Map<String,Double>> getPlayerStatsForOffensiveTactics(List<Game> games, String country, String playerId);
+
+    Map<Position, Map<String, Double>> getPlayerStatsForPosition(List<Game> games, String country, String playerId);
+
+    Map<OffensiveTactic, Map<Position, Map<String, Double>>> getStatsForOffensiveTacticsForPosition(List<Game> games, String country, String playerId);
+
+    Map<Position, Map<OffensiveTactic, Map<String, Double>>> getStatsForPositionForOffensiveTactics(List<Game> games, String country, String playerId);
 }

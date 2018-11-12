@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import serverForBB.model.utils.Position;
 import serverForBB.model.utils.Stats;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class Player {
     private String lastName;
     private Map<String, Double> stats;
     private String country;
+    private Position position;
 
     public Player(String id, String country) {
         this.id = id;

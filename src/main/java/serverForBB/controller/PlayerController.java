@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import serverForBB.model.Player;
 import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.PlayerResponse;
+import serverForBB.model.utils.Position;
 import serverForBB.model.utils.StatRequest;
 import serverForBB.service.PlayerService;
 
@@ -72,5 +73,22 @@ public class PlayerController {
     @PostMapping(value = "/offTactics/{playerId}")
     public Map<OffensiveTactic, Map<String, Double>> getStatsForOffensiveTacticsForGameList(@RequestBody StatRequest request, @PathVariable String playerId){
         return playerService.getPlayerStatsForOffensiveTactics(request.getGames(), request.getCountry(), playerId);
+    }
+
+    @PostMapping(value = "/position/{playerId}")
+    public Map<Position, Map<String, Double>> getStatsForPositionForGameList(@RequestBody StatRequest request, @PathVariable String playerId){
+        return playerService.getPlayerStatsForPosition(request.getGames(), request.getCountry(), playerId);
+    }
+
+    @PostMapping(value = "/position/offTactics/{playerId}")
+    public Map<Position, Map<OffensiveTactic, Map<String, Double>>> getStatsForPositionForOffensiveTacticsForGameList(@RequestBody StatRequest request,
+                                                                                                                      @PathVariable String playerId){
+        return playerService.getStatsForPositionForOffensiveTactics(request.getGames(), request.getCountry(), playerId);
+    }
+
+    @PostMapping(value = "/offTactics/position/{playerId}")
+    public Map<OffensiveTactic, Map<Position, Map<String, Double>>> getStatsForOffensiveTacticsForPositionForGameList(@RequestBody StatRequest request,
+                                                                                                                      @PathVariable String playerId){
+        return playerService.getStatsForOffensiveTacticsForPosition(request.getGames(), request.getCountry(), playerId);
     }
 }

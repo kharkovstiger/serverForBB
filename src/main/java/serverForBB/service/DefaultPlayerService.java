@@ -2,10 +2,10 @@ package serverForBB.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import serverForBB.model.*;
 import serverForBB.model.utils.OffensiveTactic;
 import serverForBB.model.utils.PlayerResponse;
+import serverForBB.model.utils.Position;
 import serverForBB.model.utils.Record;
 import serverForBB.repository.PlayerRepository;
 
@@ -61,9 +61,49 @@ public class DefaultPlayerService implements PlayerService{
             List<Game> gamesForTactic=games.stream().filter(g -> getTeam(g, country).getOffensiveTactic().equals(offensiveTactic))
                     .collect(Collectors.toList());
             PlayerResponse response=getPlayersStatForGameList(gamesForTactic, country);
-            List<Player> players=getAverages(response.getPlayers(), "games");
+            List<Player> players=getAverages(response.getPlayers(), "game");
             players.stream().filter(p -> p.getId().equals(playerId)).findFirst()
                     .ifPresent(player -> result.put(offensiveTactic, player.getStats()));
+        }
+        return result;
+    }
+
+    @Override
+    public Map<Position, Map<String, Double>> getPlayerStatsForPosition(List<Game> games, String country, String playerId) {
+        Map<Position, Map<String, Double>> result=new HashMap<>();
+        for (Position position : Position.values()) {
+            List<Game> gamesForPlayer=games.stream().filter(g -> getTeam(g, country).getPlayers().stream()
+                    .anyMatch(p -> p.getId().equals(playerId) && position.equals(p.getPosition())))
+                    .collect(Collectors.toList());
+            PlayerResponse response=getPlayersStatForGameList(gamesForPlayer, country);
+            List<Player> players=getAverages(response.getPlayers(), "game");
+            players.stream().filter(p -> p.getId().equals(playerId)).findFirst()
+                    .ifPresent(player -> result.put(position, player.getStats()));
+        }
+        return result;
+    }
+
+    @Override
+    public Map<OffensiveTactic, Map<Position, Map<String, Double>>> getStatsForOffensiveTacticsForPosition(List<Game> games, String country, String playerId) {
+        Map<OffensiveTactic, Map<Position, Map<String, Double>>> result=new HashMap<>();
+        for (OffensiveTactic offensiveTactic : OffensiveTactic.values()) {
+            List<Game> gamesForTactic=games.stream().filter(g -> getTeam(g, country).getOffensiveTactic().equals(offensiveTactic))
+                    .collect(Collectors.toList());
+            Map<Position, Map<String, Double>> partialResult=getPlayerStatsForPosition(gamesForTactic, country, playerId);
+            result.put(offensiveTactic, partialResult);
+        }
+        return result;
+    }
+
+    @Override
+    public Map<Position, Map<OffensiveTactic, Map<String, Double>>> getStatsForPositionForOffensiveTactics(List<Game> games, String country, String playerId) {
+        Map<Position, Map<OffensiveTactic, Map<String, Double>>> result=new HashMap<>();
+        for (Position position : Position.values()) {
+            List<Game> gamesForPlayer=games.stream().filter(g -> getTeam(g, country).getPlayers().stream()
+                    .anyMatch(p -> p.getId().equals(playerId) && position.equals(p.getPosition())))
+                    .collect(Collectors.toList());
+            Map<OffensiveTactic, Map<String, Double>> partialResult=getPlayerStatsForOffensiveTactics(gamesForPlayer, country, playerId);
+            result.put(position, partialResult);
         }
         return result;
     }

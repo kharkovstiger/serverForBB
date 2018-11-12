@@ -168,6 +168,7 @@ public class DefaultGameService implements GameService {
                 stats.replace("points",Double.parseDouble(nList.item(13+q).getTextContent().trim()));
                 stats.replace("doubleDouble",isDD(stats)==2?1.:0.);
                 player.setStats(stats);
+                player.setPosition(Position.valueOf(nList.item(0).getTextContent().trim()));
                 String playerString=bbapiService.getPlayer(id, LOGIN, CODE);
                 doc=getDocument(playerString);
                 String firstName=doc.getElementsByTagName("firstName").item(0).getTextContent().trim();

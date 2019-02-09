@@ -12,6 +12,7 @@ public class Countries {
         countries.put("Ukraina", 33);
         countries.put("Rossiya", 19);
         countries.put("Belarus", 85);
+        countries.put("Indonesia", 43);
     }
 
 }
